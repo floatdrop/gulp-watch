@@ -26,6 +26,20 @@ gulp.task('default', function () {
 });
 ```
 
+If you want to watch all directories, include those, which will be __created__ after:
+
+```js
+var gulp = require('gulp'),
+    watch = require('gulp-watch');
+
+gulp.task('default', function () {
+	watch({glob: 'scss/**/*.scss'}, function(files) {
+        return files.pipe(sass())
+            .pipe(gulp.dest('./dist/'));
+    });
+});
+```
+
 ### Continuous stream of events
 
 This is usefull, when you want blazingly fast rebuilding per-file.
