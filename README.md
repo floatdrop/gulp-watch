@@ -163,6 +163,12 @@ Name of the watcher. If it present in options, you will get more readable output
 
 ![Naming watchers](https://github.com/floatdrop/gulp-watch/raw/master/img/naming.png)
 
+#### options.verbose
+Type: `Boolean`  
+Default: `false`
+
+This options will enable more verbose output (useful for debugging).
+
 __Notes__: 
  
 1. you cannot pipe to watcher, that got this option (writable stream will be closed).

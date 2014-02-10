@@ -31,7 +31,7 @@ module.exports = function (opts, cb) {
     duplex.gaze = new Gaze(opts.glob);
     duplex._write = function _write(file, encoding, done) {
         duplex.gaze.add(file.path, function () {
-            logEvent('added to watch', file.path, opts);
+            if (opts.verbose) { logEvent('added to watch', file.path, opts); }
             done();
         });
         memorizeProperties(file);

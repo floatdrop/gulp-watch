@@ -43,10 +43,10 @@
   "dependencies": {
     "gulp-batch": "~0.4",
     "gulp-util": "~2.2.6",
-    "vinyl-fs": "0.0.1",
-    "glob2base": "0.0.4",
+    "vinyl-fs": "~0.0.2",
+    "glob2base": "~0.0.8",
     "minimatch": "~0.2.14",
-    "gaze": "~0.4.3"
+    "gaze": "~0.5.0"
   },
   "engine": "node >= 0.10"
 }
