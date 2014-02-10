@@ -169,11 +169,6 @@ Default: `false`
 
 This options will enable more verbose output (useful for debugging).
 
-__Notes__: 
- 
-1. you cannot pipe to watcher, that got this option (writable stream will be closed).
-2. you will receive vinyl File object only on changes.
-
 ### Methods
 
 Returned Stream from constructor have some useful methods:
