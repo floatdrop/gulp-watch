@@ -33,7 +33,7 @@ var gulp = require('gulp'),
     watch = require('gulp-watch');
 
 gulp.task('default', function () {
-	watch({glob: 'scss/**/*.scss'}, function(files) {
+    watch({glob: 'scss/**/*.scss'}, function(files) {
         return files.pipe(sass())
             .pipe(gulp.dest('./dist/'));
     });
@@ -139,6 +139,12 @@ Type: `String`
 Default: `undefined`
 
 If you want to detect new files, then you have to use this option. When `gulp-watch` gets files from `gulp.src` it looses the information about pattern of matching - therefore it can not detect new files.
+
+#### options.base
+Type: `String`  
+Default: `undefined`
+
+Use explicit base path for files from glob.
 
 #### options.emitOnGlob
 Type: `Boolean`  

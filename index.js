@@ -78,7 +78,7 @@ module.exports = function (opts, cb) {
             if (file.base) { file.base = pathCache[file.path].base; }
             if (file.cwd) { file.cwd = pathCache[file.path].cwd; }
         } else {
-            file.base = calculateBase(opts.glob, file) || file.base;
+            file.base = opts.base || calculateBase(opts.glob, file) || file.base;
             memorizeProperties(file);
         }
     }
