@@ -26,7 +26,7 @@ gulp.task('default', function () {
 });
 ```
 
-If you want to watch all directories, include those, which will be __created__ after:
+To watch entire glob of files and directories you should use `glob` option. In this case gulp-watch will pipe files matching glob downstream, and begin watching them. Moreover, any newly created files that match glob will also be piped downstream, and be watched for changes.
 
 ```js
 var gulp = require('gulp'),
@@ -63,7 +63,7 @@ gulp.task('default', function () {
 });
 ```
 
-If you want to watch all directories, include those, which will be __created__ after:
+Same as before - version with `glob` option:
 
 ```js
 gulp.task('default', function () {
@@ -138,7 +138,7 @@ This options will pass vinyl objects, that was piped into `watch` to next Stream
 Type: `String|Array`  
 Default: `undefined`
 
-If you want to detect new files, then you have to use this option. When `gulp-watch` gets files from `gulp.src` it looses the information about pattern of matching - therefore it can not detect new files.
+If you want to detect new files, then you have to use this option. When `gulp-watch` gets files from `gulp.src` it looses the information about pattern of matching - therefore it can not detect new files, but with passed pattern in this option, `gulp-watch` will watch all files, that matched pattern and any new files, that was created after watch started and match `glob` pattern.
 
 #### options.base
 Type: `String`  
