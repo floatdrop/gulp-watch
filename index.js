@@ -50,6 +50,10 @@ module.exports = function (opts, cb) {
 
     duplex.gaze.on('error', duplex.emit.bind(duplex, 'error'));
     duplex.gaze.on('ready', duplex.emit.bind(duplex, 'ready'));
+    duplex.gaze.on('changed', duplex.emit.bind(duplex, 'changed'));
+    duplex.gaze.on('added', duplex.emit.bind(duplex, 'added'));
+    duplex.gaze.on('deleted', duplex.emit.bind(duplex, 'deleted'));
+    duplex.gaze.on('renamed', duplex.emit.bind(duplex, 'renamed'));
 
     duplex.gaze.on('all', function (event, filepath) {
         if (!opts.silent) { logEvent(event, filepath, opts); }
