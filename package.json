@@ -9,7 +9,7 @@
     "gulpplugin"
   ],
   "scripts": {
-    "test": "istanbul test _mocha --report html -- test/*-test*.js -R spec -t 5000",
+    "test": "istanbul test _mocha --report html -- test/*-test*.js -R spec -t 5000 -s 4000",
     "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test/*-test.js test/*-tests.js -R spec -t 5000 && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {

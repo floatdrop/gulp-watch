@@ -15,13 +15,13 @@ var gulp = require('gulp'),
 describe('per-file building', function () {
 
     beforeEach(function (done) {
-        console.log();
         require('rimraf')('temp', done);
     });
 
     function task(options) {
         options = options || {};
         options.timeout = options.timeout || 0;
+        options.silent = options.silent || true;
 
         var w = watch(options);
 

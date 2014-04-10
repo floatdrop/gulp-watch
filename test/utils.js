@@ -8,7 +8,7 @@ utils.touchFiles = function touchFiles(glob, done) {
         .on('data', function (file) {
             touch.sync(file.path, { nocreate: true, time: new Date() });
         })
-        .on('end', done);
+        .on('end', done || function () { });
 };
 
 module.exports = utils;

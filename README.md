@@ -9,6 +9,19 @@ Main reasons of `gulp-watch` existance is that it can easly (with a little help 
 
 ## Usage
 
+```js
+var gulp = require('gulp'),
+    watch = require('gulp-watch');
+
+gulp.task('default', function () {
+    gulp.src('scss/**/*.scss')
+        .pipe(watch(function(files) {
+            return files.pipe(sass())
+                .pipe(gulp.dest('./dist/'));
+        }));
+});
+```
+
 ### Batching mode
 
 This is close to bundled `gulp.watch`, but with some tweaks. First - files will be grouped by timeout of `200` and passed into stream inside callback (this will keep `git checkout` commands do rebuilding only once). Second - callbacks will __never__ run parallel (unless you remove `return`), until one stream ends working.
@@ -83,7 +96,7 @@ var grep = require('gulp-grep-stream');
 var mocha = require('gulp-mocha');
 var plumber = require('gulp-plumber');
 
-gulp.task('watch', function() {
+gulp.task('default', function() {
     gulp.src(['lib/**', 'test/**'], { read: false })
         .pipe(watch({ emit: 'all' }, function(files) {
             files
@@ -96,13 +109,28 @@ gulp.task('watch', function() {
                 })
         }));
 });
-
-gulp.task('default', function () {
-    gulp.run('watch');
-});
-
-// run `gulp watch` or just `gulp` for watching and rerunning tests
 ```
+
+### Filtering custom event
+
+When you want to make actions only on specific event, you can use [`gulp-filter`](https://github.com/sindresorhus/gulp-filter) and `event` attribute, which is added to all files, that was `added`, `changed` or `deleted` (as [gaze documentation](https://github.com/shama/gaze#events) says):
+
+```js
+var filter = require('gulp-filter');
+
+function isAdded(file) {
+    return file.event === 'added';
+}
+gulp.task('default', function () {
+    watch({glob: '**/*.js'})
+        .pipe(filter(isAdded))
+        .pipe(gulp.dest('newfiles'))
+        .pipe(filter.restore())
+        .pipe(gulp.dest('oldfiles'));
+});
+```
+
+**Notice:** `event` property is not added to files, that was emitted by `emitOnGlob` and `emit: 'all'` options, only to files, that actually caused event.
 
 ## API
 
@@ -174,6 +202,12 @@ Type: `Boolean`
 Default: `false`
 
 This options will enable more verbose output (useful for debugging).
+
+#### options.silent
+Type: `Boolean`  
+Default: `false`
+
+This options will disable all output (useful for tests).
 
 ### Methods
 

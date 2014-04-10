@@ -15,7 +15,6 @@ var gulp = require('gulp'),
 describe('glob mode (base)', function () {
 
     beforeEach(function (done) {
-        console.log();
         require('rimraf')('temp', done);
     });
 
@@ -23,6 +22,8 @@ describe('glob mode (base)', function () {
         options = options || {};
         options.timeout = options.timeout || 0;
         options.glob = 'test/fixtures/**/*.scss';
+        options.silent = options.silent || true;
+
         var w = watch(options);
 
         return {

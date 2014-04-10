@@ -31,7 +31,7 @@ module.exports = function (opts, cb) {
     duplex.gaze = new Gaze(opts.glob);
     duplex._write = function _write(file, encoding, done) {
         duplex.gaze.add(file.path, function () {
-            if (opts.verbose) { logEvent('added to watch', file.path, opts); }
+            if (!opts.silent && opts.verbose) { logEvent('added to watch', file.path, opts); }
             done();
         });
         memorizeProperties(file);
@@ -40,7 +40,7 @@ module.exports = function (opts, cb) {
     duplex._read = function _read() { };
 
     duplex.on('finish', function () {
-        logEvent('added from pipe', fileCount(duplex.gaze), opts);
+        if (!opts.silent) { logEvent('added from pipe', fileCount(duplex.gaze), opts); }
     });
 
     duplex.close = function () {
@@ -52,13 +52,16 @@ module.exports = function (opts, cb) {
     duplex.gaze.on('ready', duplex.emit.bind(duplex, 'ready'));
 
     duplex.gaze.on('all', function (event, filepath) {
-        logEvent(event, filepath, opts);
+        if (!opts.silent) { logEvent(event, filepath, opts); }
         var glob = [ filepath ];
         if (opts.emit === 'all') {
             glob = glob.concat(opts.glob ? opts.glob : []);
             glob = glob.concat(getWatchedFiles(duplex.gaze));
         }
-        fs.src(glob, opts).on('data', passThrough);
+        fs.src(glob, opts).on('data', function (file) {
+            if (file.path === filepath) { file.event = event; }
+            passThrough(file);
+        });
     });
 
     if (opts.glob.length && opts.emitOnGlob !== false) {
