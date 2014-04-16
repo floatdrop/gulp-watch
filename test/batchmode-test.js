@@ -32,20 +32,15 @@ describe('batching mode example', function () {
     }
 
     it('should work', function (done) {
-        gulp.task('default', function () {
-            var watcher = task();
-            watcher.on('finish', function () {
-                watcher.on('end', done);
-                watcher.close();
-            });
-            return watcher;
+        var watcher = task();
+        watcher.on('finish', function () {
+            watcher.on('end', done);
+            watcher.close();
         });
-
-        gulp.run('default');
     });
 
-    it('should work with passThrough === false', function (done) {
-        gulp.task('default', function () {
+    describe('', function () {
+        it('should work with passThrough === false', function (done) {
             var watcher = task({ passThrough: false });
             watcher.on('finish', touchFiles.bind(null, 'test/fixtures/scss/*.scss', function () {
                 setTimeout(function () {
@@ -53,36 +48,28 @@ describe('batching mode example', function () {
                     watcher.close();
                 }, 1000);
             }));
-            return watcher;
         });
 
-        gulp.run('default');
-    });
-
-    it('should work with passThrough === false && emit === `all`', function (done) {
-        gulp.task('default', function () {
-            var watcher = task({ passThrough: false, emit: 'all' });
-            watcher.on('finish', touchFiles.bind(null, 'test/fixtures/scss/_cats.scss', function () {
+        it('should work with passThrough === false && emit === `all`', function (done) {
+            var watcher = task({ passThrough: false });
+            watcher.on('finish', touchFiles.bind(null, 'test/fixtures/scss/*.scss', function () {
                 setTimeout(function () {
                     watcher.on('end', done);
                     watcher.close();
                 }, 1000);
             }));
-            return watcher;
         });
 
-        gulp.run('default');
-    });
-
-    afterEach(function (done) {
-        var path = require('path');
-        async.parallel({
-            actual: hashdir.bind(hashdir, path.join(__dirname, '../temp/css')),
-            expected: hashdir.bind(hashdir, path.join(__dirname, 'expected/css')),
-        }, function (err, result) {
-            should.not.exist(err);
-            result.actual.should.eql(result.expected);
-            done();
+        afterEach(function (done) {
+            var path = require('path');
+            async.parallel({
+                actual: hashdir.bind(hashdir, path.join(__dirname, '../temp/css')),
+                expected: hashdir.bind(hashdir, path.join(__dirname, 'expected/css')),
+            }, function (err, result) {
+                should.not.exist(err);
+                result.actual.should.eql(result.expected);
+                done();
+            });
         });
     });
 });

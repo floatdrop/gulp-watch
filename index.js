@@ -40,7 +40,7 @@ module.exports = function (opts, cb) {
     duplex._read = function _read() { };
 
     duplex.on('finish', function () {
-        if (!opts.silent) { logEvent('added from pipe', fileCount(duplex.gaze), opts); }
+        if (!opts.silent) { fileCount(duplex.gaze, function (err, count) { logEvent('added from pipe', count, opts); }); }
     });
 
     duplex.close = function () {
@@ -56,7 +56,7 @@ module.exports = function (opts, cb) {
         var glob = [ filepath ];
         if (opts.emit === 'all') {
             glob = glob.concat(opts.glob ? opts.glob : []);
-            glob = glob.concat(getWatchedFiles(duplex.gaze));
+            glob = glob.concat(duplex.gaze._patterns);
         }
         fs.src(glob, opts).on('data', function (file) {
             if (file.path === filepath) { file.event = event; }
@@ -102,18 +102,27 @@ function logEvent(event, filepath, opts) {
     gutil.log.apply(gutil, msg);
 }
 
-function getWatchedFiles(gaze) {
-    var files = [];
-    var watched = gaze.watched();
-    Object.keys(watched).forEach(function (dir) {
-        files = files.concat(watched[dir]);
+function getWatchedFiles(gaze, cb) {
+    gaze.watched(function (err, dirs) {
+        if (err) { return cb(err); }
+        var files = [];
+        Object.keys(dirs).forEach(function (dir) {
+            dirs[dir].forEach(function (file) {
+                if (file[file.length - 1] !== '/') {
+                    files.push(file);
+                }
+            });
+        });
+        cb(null, files);
     });
-    return files;
 }
 
-function fileCount(gaze) {
-    var count = getWatchedFiles(gaze).length;
-    return count + (count === 1 ? ' file' : ' files');
+function fileCount(gaze, cb) {
+    getWatchedFiles(gaze, function (err, files) {
+        if (err) { return cb(err); }
+        var count = files.length;
+        cb(null, count + (count === 1 ? ' file' : ' files'));
+    });
 }
 
 function calculateBase(globs, file) {
