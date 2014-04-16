@@ -4,106 +4,69 @@
 delete require.cache[require.resolve('..')];
 
 var gulp = require('gulp'),
-    sass = require('gulp-sass'),
     watch = require('..'),
-    touchFiles = require('./utils').touchFiles,
+    utils = require('./utils'),
     path = require('path'),
     fs = require('fs');
 
+var should = require('should');
+
 describe('file.event attribute', function () {
 
-    beforeEach(function (done) {
-        require('rimraf')('temp', done);
+    it('should emit deleted event', function (done) {
+        fs.writeFileSync('test/fixtures/_tobedeleted.js', 'To be deleted');
+        var options = utils.defaults({ passThrough: false });
+        var watcher = gulp.src(options.src).pipe(watch(options));
+        watcher.on('data', function (file) {
+            file.should.have.property('event', 'deleted');
+            file.isNull().should.be.ok;
+            watcher.on('end', done);
+            watcher.close();
+        });
+        watcher.on('finish', function () { fs.unlinkSync('test/fixtures/_tobedeleted.js'); });
     });
-
-    function task(options) {
-        options = options || {};
-        options.timeout = options.timeout || 0;
-        options.glob = 'test/fixtures/**/*.scss';
-        options.silent = options.silent || true;
-
-        var w = watch(options);
-
-        return {
-            watch: w,
-            stream: w
-                .pipe(sass())
-                .pipe(gulp.dest('temp'))
-        };
-    }
 
     it('should add event property for changed files', function (done) {
-        gulp.task('default', function () {
-            var t = task({ emitOnGlob: false });
-            t.watch.on('ready', touchFiles.bind(null, 'test/fixtures/scss/variables.scss', null));
-            t.watch.on('data', function (file) {
-                file.should.have.property('event', 'changed');
-                t.watch.on('end', done);
-                t.watch.close();
-            });
-            return t.stream;
+        var options = utils.defaults({ passThrough: false });
+        var watcher = gulp.src('test/fixtures/test.js').pipe(watch(options));
+        watcher.on('data', function (file) {
+            file.should.have.property('event', 'changed');
+            watcher.on('end', done);
+            watcher.close();
         });
-
-        gulp.run('default');
-    });
-
-    it('should emit deleted event', function (done) {
-        gulp.task('default', function () {
-            var t = task({ emitOnGlob: false });
-            var err;
-            t.watch.on('data', function (file) {
-                if (file.event !== 'deleted') { err = 'file event property should eql deleted, got ' + file.event; }
-                t.watch.close();
-            });
-            t.watch.on('ready', function () {
-                var data = fs.readFileSync('test/fixtures/scss/variables.scss');
-                fs.unlinkSync('test/fixtures/scss/variables.scss');
-                setTimeout(function () {
-                    fs.writeFileSync('test/fixtures/scss/variables.scss', data);
-                    done(err);
-                }, 500);
-            });
-            return t.stream;
-        });
-
-        gulp.run('default');
+        watcher.on('finish', utils.touch('test/fixtures/test.js'));
     });
 
     it('should not add event property for `emitOnGlob`', function (done) {
-        gulp.task('default', function () {
-            var t = task();
-            t.watch.on('data', function (file) {
-                file.should.not.have.property('event');
+        var options = utils.defaults({ glob: 'test/fixtures/*', emitOnGlob: true });
+        var i = 0;
+        var watcher = watch(options)
+            .on('data', function (file) {
+                i ++;
+                should(file.event).be.not.ok;
+                if (i === 2) {
+                    watcher.on('end', done);
+                    watcher.close();
+                }
             });
-            t.watch.on('ready', function () {
-                t.watch.on('end', done);
-                t.watch.close();
-            });
-            return t.stream;
-        });
-
-        gulp.run('default');
     });
 
     it('should not add event property for all files with `emit: all`', function (done) {
-        gulp.task('default', function () {
-            var t = task({ emitOnGlob: false, emit: 'all' });
-            t.watch.on('ready', touchFiles.bind(null, 'test/fixtures/scss/variables.scss', function () {
-                setTimeout(function () {
-                    t.watch.on('end', done);
-                    t.watch.close();
-                }, 1000);
-            }));
-            t.watch.on('data', function (file) {
-                if (file.path === path.resolve('test/fixtures/scss/variables.scss')) {
-                    file.should.have.property('event', 'changed');
-                } else {
-                    file.should.not.have.property('event');
-                }
-            });
-            return t.stream;
+        var options = utils.defaults({ emit: 'all', passThrough: false });
+        var watcher = gulp.src(options.src).pipe(watch(options));
+        var i = 0;
+        watcher.on('data', function (file) {
+            i ++;
+            if (file.path === path.resolve('test/fixtures/test.js')) {
+                file.should.have.property('event', 'changed');
+            } else {
+                file.should.not.have.property('event');
+            }
+            if (i === 2) {
+                watcher.on('end', done);
+                watcher.close();
+            }
         });
-
-        gulp.run('default');
+        watcher.on('finish', utils.touch('test/fixtures/test.js'));
     });
 });

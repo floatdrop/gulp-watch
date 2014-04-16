@@ -112,20 +112,20 @@ function logEvent(event, filepath, opts) {
     gutil.log.apply(gutil, msg);
 }
 
-function getWatchedFiles(gaze, cb) {
-    gaze.watched(function (err, dirs) {
-        if (err) { return cb(err); }
-        var files = [];
-        Object.keys(dirs).forEach(function (dir) {
-            dirs[dir].forEach(function (file) {
-                if (file[file.length - 1] !== '/') {
-                    files.push(file);
-                }
-            });
+ function getWatchedFiles(gaze, cb) {
+    var dirs = gaze._watched;
+    var files = [];
+    Object.keys(dirs).forEach(function (dir) {
+        dirs[dir].forEach(function (file) {
+            if (file[file.length - 1] !== '/') {
+                files.push(file);
+            }
         });
-        cb(null, files);
     });
+    cb(null, files);
 }
+
+module.exports.getWatchedFiles = getWatchedFiles;
 
 function fileCount(gaze, cb) {
     getWatchedFiles(gaze, function (err, files) {
@@ -134,6 +134,8 @@ function fileCount(gaze, cb) {
         cb(null, count + (count === 1 ? ' file' : ' files'));
     });
 }
+
+module.exports.fileCount = fileCount;
 
 function calculateBase(globs, file) {
     if (typeof globs === 'string') { globs = [ globs ]; }

@@ -1,15 +1,25 @@
 'use strict';
-var utils = {},
-    fs = require('fs');
+var utils = {
+        es: require('event-stream')
+    };
 
-utils.touchFiles = function touchFiles(glob, done) {
-    var gs = require('glob-stream');
-    gs.create(glob)
-        .on('data', function (file) {
-            var data = fs.readFileSync(file.path);
-            fs.writeFileSync(file.path, data);
-        })
-        .on('end', done || function () { });
+utils.defaults = function defaults(options) {
+    options = options || {};
+    options.timeout = options.timeout || 0;
+    options.silent = options.silent || true;
+    options.verbose = options.verbose || false;
+    options.src = options.src || './test/fixtures/*';
+    return options;
+};
+
+utils.touchFile = function (file) {
+    setTimeout(function () {
+        require('touch').sync(file, { nocreate: true, time: new Date() });
+    }, 1000);
+};
+
+utils.touch = function touch(file, done) {
+    return utils.touchFile.bind(null, file, done);
 };
 
 module.exports = utils;
