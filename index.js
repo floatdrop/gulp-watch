@@ -58,6 +58,7 @@ module.exports = function (opts, cb) {
             glob = glob.concat(opts.glob ? opts.glob : []);
             glob = glob.concat(duplex.gaze._patterns);
         }
+        if (event === 'deleted') { passThrough(voidFile(filepath, event)); }
         fs.src(glob, opts).on('data', function (file) {
             if (file.path === filepath) { file.event = event; }
             passThrough(file);
@@ -66,6 +67,14 @@ module.exports = function (opts, cb) {
 
     if (opts.glob.length && opts.emitOnGlob !== false) {
         fs.src(opts.glob, opts).on('data', passThrough);
+    }
+
+    function voidFile(filepath, event) {
+        return {
+            path: filepath,
+            event: event,
+            isNull: function () { return true; }
+        };
     }
 
     function passThrough(file) {

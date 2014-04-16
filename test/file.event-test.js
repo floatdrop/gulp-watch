@@ -7,7 +7,8 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     watch = require('..'),
     touchFiles = require('./utils').touchFiles,
-    path = require('path');
+    path = require('path'),
+    fs = require('fs');
 
 describe('file.event attribute', function () {
 
@@ -39,6 +40,28 @@ describe('file.event attribute', function () {
                 file.should.have.property('event', 'changed');
                 t.watch.on('end', done);
                 t.watch.close();
+            });
+            return t.stream;
+        });
+
+        gulp.run('default');
+    });
+
+    it('should emit deleted event', function (done) {
+        gulp.task('default', function () {
+            var t = task({ emitOnGlob: false });
+            var err;
+            t.watch.on('data', function (file) {
+                if (file.event !== 'deleted') { err = 'file event property should eql deleted, got ' + file.event; }
+                t.watch.close();
+            });
+            t.watch.on('ready', function () {
+                var data = fs.readFileSync('test/fixtures/scss/variables.scss');
+                fs.unlinkSync('test/fixtures/scss/variables.scss');
+                setTimeout(function () {
+                    fs.writeFileSync('test/fixtures/scss/variables.scss', data);
+                    done(err);
+                }, 500);
             });
             return t.stream;
         });
