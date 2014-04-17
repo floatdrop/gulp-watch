@@ -2,7 +2,6 @@
 
 var Duplex = require('stream').Duplex,
     batch = require('gulp-batch'),
-    Gaze = require('gaze'),
     fs = require('vinyl-fs'),
     path = require('path'),
     gutil = require('gulp-util'),
@@ -10,6 +9,8 @@ var Duplex = require('stream').Duplex,
     glob2base = require('glob2base');
 
 module.exports = function (opts, cb) {
+    var Gaze = require('gaze');
+
     if (typeof opts !== 'object') {
         cb = opts;
         opts = { };
