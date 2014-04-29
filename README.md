@@ -136,11 +136,17 @@ gulp.task('default', function () {
 
 ### watch([options, callback])
 
-This function creates have two different modes, that are depends on have you provice callback function, or not. If you do - you get __batched__ mode, if you not - you get __stream__.
+Creates watcher, that will spy on files, that was piped into it or matched `glob` option in options.
+
+This function have three different modes, based on `callback` argument:
+
+1. Not defined - you get __stream__ of events, that happens with files.
+2. `Function` - you get __batched__ mode. See `Callback signature` below.
+3. `Array` - on every event, that happens with your files tasks from `gulp` singleton will be executed (similar to `gulp.watch`).
 
 ### Callback signature: `function(events, [done])`
 
- * `events` - is `Stream` of incoming events.
+ * `events` - is `Stream` of incoming events. Events will be grouped by timeout to prevent many tasks execution by commands like `git pull`.
  * `done` - is callback for your function signal to batch, that you are done. This allows to run your callback as soon as previous end.
 
 ### Options:

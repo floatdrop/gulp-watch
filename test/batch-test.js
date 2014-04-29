@@ -1,4 +1,4 @@
-/* global describe, it, after */
+/* global describe, it */
 'use strict';
 
 delete require.cache[require.resolve('..')];

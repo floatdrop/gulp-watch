@@ -16,6 +16,14 @@ module.exports = function (opts, cb) {
         opts = { };
     }
 
+    if (Array.isArray(cb)) {
+        var tasks = cb;
+        var gulp = require('gulp');
+        cb = function() {
+            gulp.start.apply(gulp, tasks);
+        }.bind(gulp);
+    }
+
     opts.emit = opts.emit || 'one';
     opts.glob = opts.glob || [];
     if (typeof opts.glob === 'string') { opts.glob = [ opts.glob ]; }
