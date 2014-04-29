@@ -142,7 +142,7 @@ This function have three different modes, based on `callback` argument:
 
 1. Not defined - you get __stream__ of events, that happens with files.
 2. `Function` - you get __batched__ mode. See `Callback signature` below.
-3. `Array` - on every event, that happens with your files tasks from `gulp` singleton will be executed (similar to `gulp.watch`).
+3. `Array` - on every event, that happens with your files tasks from `gulp` singleton will be executed (similar to `gulp.watch`, but with batching of events).
 
 ### Callback signature: `function(events, [done])`
 
