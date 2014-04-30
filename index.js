@@ -87,6 +87,9 @@ module.exports = function (opts, cb) {
     }
 
     function passThrough(file) {
+        if (!opts.silent && opts.verbose) {
+            logEvent('passed through', file.path, opts);
+        }
         restoreProperties(file, opts);
         cb(file);
         duplex.push(file);

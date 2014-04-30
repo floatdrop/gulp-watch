@@ -37,7 +37,9 @@
     "mocha": "~1.14.0",
     "mocha-lcov-reporter": "0.0.1",
     "should": "~3.0.1",
-    "touch": "0.0.3"
+    "touch": "0.0.3",
+    "proxyquire": "^0.6.0",
+    "sinon": "^1.9.1"
   },
   "dependencies": {
     "gulp-batch": "~0.4",
