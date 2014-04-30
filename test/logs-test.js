@@ -81,7 +81,7 @@ describe('logging', function () {
             var processedCall = gutilStub.log.firstCall;
             processedCall.args[0].should.equal(gutil.colors.magenta('test.js'));
             processedCall.args[1].should.equal('was');
-            processedCall.args[2].should.equal('processed');
+            processedCall.args[2].should.equal('passed through');
             done();
         }, 100);
     });
@@ -101,7 +101,7 @@ describe('logging', function () {
             processedCall.args[0].should.equal(gutil.colors.cyan(name) + ' saw');
             processedCall.args[1].should.equal(gutil.colors.magenta('test.js'));
             processedCall.args[2].should.equal('was');
-            processedCall.args[3].should.equal('processed');
+            processedCall.args[3].should.equal('passed through');
             done();
         }, 100);
     });

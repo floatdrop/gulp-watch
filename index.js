@@ -88,7 +88,7 @@ module.exports = function (opts, cb) {
 
     function passThrough(file) {
         if (!opts.silent && opts.verbose) {
-            logEvent('processed', file.path, opts);
+            logEvent('passed through', file.path, opts);
         }
         restoreProperties(file, opts);
         cb(file);
