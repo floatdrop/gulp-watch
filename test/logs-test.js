@@ -4,37 +4,42 @@
 var proxyquire = require('proxyquire'),
     gutil = require('gulp-util'),
     gutilStub = {
-        log: function() {}
+        log: function () {
+          // console.log(arguments);
+        }
     },
     watch = proxyquire('..', {
         'gulp-util': gutilStub
     }),
     sinon = require('sinon'),
-    should = require('should'),
     gulp = require('gulp');
 
+require('should');
 describe('logging', function () {
-    beforeEach(function() {
+    beforeEach(function () {
         sinon.spy(gutilStub, 'log');
     });
 
-    afterEach(function() {
+    afterEach(function () {
         gutilStub.log.restore();
     });
 
-    function assertSimpleCall() {
-        gutilStub.log.calledTwice.should.be.true;
+    function assertSimpleCall(offset) {
+        if (typeof offset !== 'number') {
+            offset = 0;
+        }
+        gutilStub.log.calledThrice.should.be.true;
 
-        var firstCall = gutilStub.log.firstCall;
-        var secondCall = gutilStub.log.secondCall;
+        var watchLogCall = gutilStub.log.secondCall;
+        var pipeLogCall = gutilStub.log.thirdCall;
 
-        firstCall.args[0].should.equal(gutil.colors.magenta('test.js'));
-        firstCall.args[1].should.equal('was');
-        firstCall.args[2].should.equal('added to watch');
+        watchLogCall.args[0 + offset].should.equal(gutil.colors.magenta('test.js'));
+        watchLogCall.args[1 + offset].should.equal('was');
+        watchLogCall.args[2 + offset].should.equal('added to watch');
 
-        secondCall.args[0].should.equal(gutil.colors.magenta('1 file'));
-        secondCall.args[1].should.equal('was');
-        secondCall.args[2].should.equal('added from pipe');
+        pipeLogCall.args[0 + offset].should.equal(gutil.colors.magenta('1 file'));
+        pipeLogCall.args[1 + offset].should.equal('was');
+        pipeLogCall.args[2 + offset].should.equal('added from pipe');
     }
 
     it('should work when verbose is true', function (done) {
@@ -51,23 +56,53 @@ describe('logging', function () {
         var name = 'Test';
         var w = gulp.src('test/fixtures/test.js').pipe(watch({ name: name, verbose: true, silent: false }));
         w.on('finish', function () {
-            gutilStub.log.calledTwice.should.be.true;
+            var watchLogCall = gutilStub.log.secondCall;
+            var pipeLogCall = gutilStub.log.thirdCall;
 
-            var firstCall = gutilStub.log.firstCall;
-            var secondCall = gutilStub.log.secondCall;
-
-            firstCall.args[0].should.equal(gutil.colors.cyan(name) + ' saw');
-            firstCall.args[1].should.equal(gutil.colors.magenta('test.js'));
-            firstCall.args[2].should.equal('was');
-            firstCall.args[3].should.equal('added to watch');
-
-            secondCall.args[0].should.equal(gutil.colors.cyan(name) + ' saw');
-            secondCall.args[1].should.equal(gutil.colors.magenta('1 file'));
-            secondCall.args[2].should.equal('was');
-            secondCall.args[3].should.equal('added from pipe');
+            assertSimpleCall(1);
+            watchLogCall.args[0].should.equal(gutil.colors.cyan(name) + ' saw');
+            pipeLogCall.args[0].should.equal(gutil.colors.cyan(name) + ' saw');
 
             w.on('end', done);
             w.close();
         });
+    });
+
+
+    it('should work when we do a direct watch', function (done) {
+        watch({
+            glob: 'test/fixtures/*.js',
+            verbose: true,
+            silent: false
+        });
+        setTimeout(function () {
+            gutilStub.log.calledOnce.should.be.true;
+
+            var processedCall = gutilStub.log.firstCall;
+            processedCall.args[0].should.equal(gutil.colors.magenta('test.js'));
+            processedCall.args[1].should.equal('was');
+            processedCall.args[2].should.equal('processed');
+            done();
+        }, 100);
+    });
+
+    it('should work when we do a direct watch with a name', function (done) {
+        var name = 'Test';
+        watch({
+            glob: 'test/fixtures/*.js',
+            verbose: true,
+            silent: false,
+            name: name
+        });
+        setTimeout(function () {
+            gutilStub.log.calledOnce.should.be.true;
+
+            var processedCall = gutilStub.log.firstCall;
+            processedCall.args[0].should.equal(gutil.colors.cyan(name) + ' saw');
+            processedCall.args[1].should.equal(gutil.colors.magenta('test.js'));
+            processedCall.args[2].should.equal('was');
+            processedCall.args[3].should.equal('processed');
+            done();
+        }, 100);
     });
 });
