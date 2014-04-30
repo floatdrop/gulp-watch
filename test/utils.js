@@ -8,7 +8,7 @@ utils.defaults = function defaults(options) {
     options.timeout = options.timeout || 0;
     options.silent = options.silent || true;
     options.verbose = options.verbose || false;
-    options.src = options.src || './test/fixtures/*';
+    options.src = options.src || './test/fixtures/*.*';
     return options;
 };
 
