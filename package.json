@@ -29,17 +29,18 @@
     "gulp": "~3.3.4",
     "gulp-grep-stream": "0.0.1",
     "gulp-mocha": "~0.2.0",
-    "jshint": "^2.5.0",
     "gulp-plumber": "~0.2.3",
     "gulp-sass": "~0.4.0",
     "istanbul": "~0.1.44",
+    "jshint": "^2.5.0",
     "longjohn": "~0.2.2",
     "mocha": "~1.14.0",
     "mocha-lcov-reporter": "0.0.1",
-    "should": "~3.0.1",
-    "touch": "0.0.3",
     "proxyquire": "^0.6.0",
-    "sinon": "^1.9.1"
+    "should": "~3.0.1",
+    "sinon": "^1.9.1",
+    "strip-ansi": "^0.2.1",
+    "touch": "0.0.3"
   },
   "dependencies": {
     "gulp-batch": "~0.4",
