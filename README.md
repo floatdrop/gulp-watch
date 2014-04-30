@@ -174,6 +174,12 @@ Default: `undefined`
 
 If you want to detect new files, then you have to use this option. When `gulp-watch` gets files from `gulp.src` it looses the information about pattern of matching - therefore it can not detect new files, but with passed pattern in this option, `gulp-watch` will watch all files, that matched pattern and any new files, that was created after watch started and match `glob` pattern.
 
+#### options.gaze
+Type: `Object`
+Default: `undefined`
+
+Contains options, that will be passed to Gaze instance. Full list can be found in [gaze readme](https://github.com/shama/gaze#properties).
+
 #### options.base
 Type: `String`  
 Default: `undefined`
