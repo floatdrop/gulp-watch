@@ -64,7 +64,7 @@ module.exports = function (opts, cb) {
         if (!opts.silent) { logEvent(event, filepath, opts); }
         var glob = [ filepath ];
         if (opts.emit === 'all') {
-            glob = glob.concat(opts.glob ? opts.glob : []);
+            glob = glob.concat(opts.glob);
             glob = glob.concat(duplex.gaze._patterns);
         }
         if (event === 'deleted') { passThrough(voidFile(filepath, event)); }
@@ -110,7 +110,7 @@ module.exports = function (opts, cb) {
     function memorizeProperties(file) {
         pathCache[file.path] = {
             base: file.base,
-            cwd: file.cwd || process.cwd()
+            cwd: file.cwd
         };
     }
 
@@ -123,7 +123,7 @@ function logEvent(event, filepath, opts) {
     gutil.log.apply(gutil, msg);
 }
 
- function getWatchedFiles(gaze, cb) {
+module.exports.getWatchedFiles = function getWatchedFiles(gaze, cb) {
     var dirs = gaze._watched;
     var files = [];
     Object.keys(dirs).forEach(function (dir) {
@@ -134,12 +134,10 @@ function logEvent(event, filepath, opts) {
         });
     });
     cb(null, files);
-}
-
-module.exports.getWatchedFiles = getWatchedFiles;
+};
 
 function fileCount(gaze, cb) {
-    getWatchedFiles(gaze, function (err, files) {
+    module.exports.getWatchedFiles(gaze, function (err, files) {
         if (err) { return cb(err); }
         var count = files.length;
         cb(null, count + (count === 1 ? ' file' : ' files'));
@@ -150,14 +148,12 @@ module.exports.fileCount = fileCount;
 
 function calculateBase(globs, file) {
     if (typeof globs === 'string') { globs = [ globs ]; }
-    for (var globIdx in globs) {
-        if (globs.hasOwnProperty(globIdx)) {
-            var p = path.relative(file.cwd || process.cwd(), file.path);
-            if (!minimatch(p, globs[globIdx])) { continue; }
-            return glob2base({
-                minimatch: new minimatch.Minimatch(globs[globIdx])
-            });
-        }
+    for (var i = globs.length - 1; i >= 0; i--) {
+        var p = path.relative(file.cwd || process.cwd(), file.path);
+        if (!minimatch(p, globs[i])) { continue; }
+        return glob2base({
+            minimatch: new minimatch.Minimatch(globs[i])
+        });
     }
 }
 

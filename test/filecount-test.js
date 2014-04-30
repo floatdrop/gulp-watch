@@ -2,7 +2,6 @@
 'use strict';
 
 var watch = require('..'),
-    path = require('path'),
     should = require('should'),
     gaze = require('gaze');
 
@@ -22,6 +21,19 @@ describe('fileCount', function () {
             if (err) { return done(err); }
             watch.fileCount(watcher, function (err, msg) {
                 msg.should.eql('2 files');
+                done();
+            });
+        });
+    });
+
+    it('should pass error when getWatchedFiles emits error', function (done) {
+        var _ = watch.getWatchedFiles;
+        watch.getWatchedFiles = function (gaze, cb) { cb(new Error('Boom')); };
+        gaze('test/fixtures/test.js', function (err, watcher) {
+            if (err) { return done(err); }
+            watch.fileCount(watcher, function (err) {
+                watch.getWatchedFiles = _;
+                should.exist(err);
                 done();
             });
         });

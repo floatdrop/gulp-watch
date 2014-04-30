@@ -7,8 +7,15 @@ var watch = require('..'),
     should = require('should');
 
 describe('calculateBase', function () {
-    it('should fix base from glob', function () {
+    it('should fix base from array of globs', function () {
         watch.calculateBase(['test/fixtures/**/*.scss'], {
+            cwd: process.cwd(),
+            path: path.join(process.cwd(), 'test/fixtures/scss/test.scss')
+        }).should.eql('test/fixtures/');
+    });
+
+    it('should fix base from string glob', function () {
+        watch.calculateBase('test/fixtures/**/*.scss', {
             cwd: process.cwd(),
             path: path.join(process.cwd(), 'test/fixtures/scss/test.scss')
         }).should.eql('test/fixtures/');
