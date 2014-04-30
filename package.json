@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "test": "jshint && mocha --reporter spec -t 3000 -s 2000",
-    "coveralls": "istanbul cover _mocha -- -R spec -t 3000 -s 2000 && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
+    "coverage": "istanbul cover node_modules/.bin/_mocha --report html -- -R spec -t 3000 -s 2000",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec -t 3000 -s 2000 && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
