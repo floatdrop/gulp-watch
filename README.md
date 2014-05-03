@@ -1,4 +1,4 @@
-# [gulp](https://github.com/gulpjs/gulp)-watch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status](https://coveralls.io/repos/floatdrop/gulp-watch/badge.png)](https://coveralls.io/r/floatdrop/gulp-watch) [![Dependency Status][depstat-image]][depstat-url]
+# [gulp](https://github.com/gulpjs/gulp)-watch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
 > Watch, that actually is an endless stream
 
 This is implementation of [`gulp.watch`](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatchglob--opts-cb) with endless stream approach. If `gulp.watch` is working for you - stick with it, otherwise you can try `gulp-watch` plugin.
@@ -246,10 +246,13 @@ Stream, that handles `gulp.src` piping.
 MIT (c) 2013 Vsevolod Strukchinsky (floatdrop@gmail.com)
 
 [npm-url]: https://npmjs.org/package/gulp-watch
-[npm-image]: https://badge.fury.io/js/gulp-watch.png
+[npm-image]: http://img.shields.io/npm/v/gulp-watch.svg
 
-[travis-url]: http://travis-ci.org/floatdrop/gulp-watch
-[travis-image]: https://travis-ci.org/floatdrop/gulp-watch.png?branch=master
+[travis-url]: https://travis-ci.org/floatdrop/gulp-watch
+[travis-image]: http://img.shields.io/travis/floatdrop/gulp-watch.svg
+
+[coveralls-url]: https://coveralls.io/r/floatdrop/gulp-watch
+[coveralls-image]: http://img.shields.io/coveralls/floatdrop/gulp-watch.svg
 
 [depstat-url]: https://david-dm.org/floatdrop/gulp-watch
-[depstat-image]: https://david-dm.org/floatdrop/gulp-watch.png?theme=shields.io
+[depstat-image]: https://david-dm.org/floatdrop/gulp-watch.svg?theme=shields.io
