@@ -16,10 +16,6 @@ module.exports = function (opts, cb) {
         opts = {};
     }
 
-    if (Array.isArray(opts)) {
-        opts = { glob: opts };
-    }
-
     if (Array.isArray(cb)) {
         var tasks = cb;
         var gulp = require('gulp');
