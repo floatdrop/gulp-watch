@@ -13,7 +13,11 @@ module.exports = function (opts, cb) {
 
     if (typeof opts !== 'object') {
         cb = opts;
-        opts = { };
+        opts = {};
+    }
+
+    if (Array.isArray(opts)) {
+        opts = { glob: opts };
     }
 
     if (Array.isArray(cb)) {

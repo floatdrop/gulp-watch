@@ -19,6 +19,27 @@ describe('array of tasks', function () {
         });
     });
 
+    it('should accept array of tasks with array of globs', function (done) {
+        var options = utils.defaults();
+        var watcher = watch([options.src], ['done']);
+        gulp.task('done', function () {
+            watcher.on('end', done);
+            watcher.close();
+        });
+    });
+
+    it('should accept array of tasks with array of globs and emit `data` events', function (done) {
+        var options = utils.defaults();
+        var watcher = watch([options.src], ['done']).on('data', function (file) {
+            if (file.event === 'changed') {
+                watcher.on('end', done);
+                watcher.close();
+            }
+        });
+        gulp.task('done', function () { });
+        watcher.on('ready', utils.touch('test/fixtures/test.js'));
+    });
+
     it('should call task on gaze event', function (done) {
         var options = utils.defaults();
         options.passThrough = false;
