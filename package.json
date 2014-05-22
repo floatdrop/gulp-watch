@@ -47,7 +47,7 @@
     "gulp-util": "~2.2.6",
     "vinyl-fs": "~0.1.0",
     "glob2base": "~0.0.8",
-    "minimatch": "~0.2.14",
+    "minimatch": "~0.3",
     "gaze": "~0.5.1"
   },
   "engine": "node >= 0.10"
