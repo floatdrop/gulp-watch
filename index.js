@@ -150,7 +150,7 @@ function calculateBase(globs, file) {
     if (typeof globs === 'string') { globs = [ globs ]; }
     for (var i = globs.length - 1; i >= 0; i--) {
         var p = path.relative(file.cwd || process.cwd(), file.path);
-        if (!minimatch(p, globs[i])) { continue; }
+        if (!minimatch.Minimatch(p, globs[i])) { continue; }
         return glob2base({
             minimatch: new minimatch.Minimatch(globs[i])
         });
