@@ -45,7 +45,7 @@
   "dependencies": {
     "gulp-batch": "~0.4",
     "gulp-util": "~2.2.6",
-    "vinyl-fs": "~0.1.0",
+    "vinyl-fs": "~0.3.0",
     "glob2base": "~0.0.8",
     "minimatch": "~0.3",
     "gaze": "~0.5.1"

@@ -11,7 +11,8 @@ var proxyquire = require('proxyquire'),
         'gulp-util': gutilStub
     }),
     sinon = require('sinon'),
-    gulp = require('gulp');
+    gulp = require('gulp'),
+    utils = require('./utils');
 
 String.prototype.stripAnsi = function () { return require('strip-ansi')(this); };
 
@@ -23,6 +24,26 @@ describe('logging', function () {
 
     afterEach(function () {
         gutilStub.log.restore();
+    });
+
+    it('should print changed message after every edit', function (done) {
+        var file = 0;
+        var watcher = watch({
+                glob: 'test/fixtures/*',
+                emitOnGlob: false
+            })
+            .on('data', function () { file++; })
+            .on('data', function () {
+                if (file === 1) { utils.touch('test/fixtures/test.js')(); }
+                if (file === 2) {
+                    gutilStub.log.calledTwice.should.be.eql(true);
+                    gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql('test.js was changed');
+                    gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql('test.js was changed');
+                    watcher.on('end', done);
+                    watcher.close();
+                }
+            });
+        watcher.on('ready', utils.touch('test/fixtures/test.js'));
     });
 
     it('should work when verbose is true', function (done) {
