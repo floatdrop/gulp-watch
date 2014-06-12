@@ -46,6 +46,24 @@ describe('logging', function () {
         watcher.on('ready', utils.touch('test/fixtures/test.js'));
     });
 
+    it('should print changed message after every edit with stream mode', function (done) {
+        var file = 0;
+        var watcher = gulp.src(['test/fixtures/test.js']).pipe(watch({ passThrough: false }))
+            .on('data', function () { file++; })
+            .on('data', function () {
+                if (file === 1) { utils.touch('test/fixtures/test.js')(); }
+                if (file === 2) {
+                    gutilStub.log.calledThrice.should.be.eql(true);
+                    gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql('1 file was added from pipe');
+                    gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql('test.js was changed');
+                    gutilStub.log.thirdCall.args.join(' ').stripAnsi().should.eql('test.js was changed');
+                    watcher.on('end', done);
+                    watcher.close();
+                }
+            });
+        watcher.on('ready', utils.touch('test/fixtures/test.js'));
+    });
+
     it('should work when verbose is true', function (done) {
         var path = 'test/fixtures/test.js';
         var w = gulp.src(path).pipe(watch({ verbose: true, silent: false }));
