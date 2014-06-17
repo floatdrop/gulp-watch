@@ -48,7 +48,7 @@
     "vinyl-fs": "~0.3.0",
     "glob2base": "~0.0.8",
     "minimatch": "~0.3",
-    "gaze": "~0.5.1"
+    "gaze": "~0.6.4"
   },
   "engine": "node >= 0.10"
 }
