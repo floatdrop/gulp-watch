@@ -3,6 +3,7 @@
 var Duplex = require('stream').Duplex,
     batch = require('gulp-batch'),
     fs = require('vinyl-fs'),
+    vinyl = require('vinyl'),
     path = require('path'),
     gutil = require('gulp-util');
 
@@ -77,11 +78,9 @@ module.exports = function (opts, cb) {
     }
 
     function voidFile(filepath, event) {
-        return {
-            path: filepath,
-            event: event,
-            isNull: function () { return true; }
-        };
+        var file = new vinyl({ path: filepath });
+        file.event = event;
+        return file;
     }
 
     function passThrough(file) {
