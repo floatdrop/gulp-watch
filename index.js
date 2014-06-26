@@ -3,10 +3,9 @@
 var Duplex = require('stream').Duplex,
     batch = require('gulp-batch'),
     fs = require('vinyl-fs'),
+    vinyl = require('vinyl'),
     path = require('path'),
-    gutil = require('gulp-util'),
-    minimatch = require('minimatch'),
-    glob2base = require('glob2base');
+    gutil = require('gulp-util');
 
 module.exports = function (opts, cb) {
     var Gaze = require('gaze');
@@ -79,11 +78,9 @@ module.exports = function (opts, cb) {
     }
 
     function voidFile(filepath, event) {
-        return {
-            path: filepath,
-            event: event,
-            isNull: function () { return true; }
-        };
+        var file = new vinyl({ path: filepath });
+        file.event = event;
+        return file;
     }
 
     function passThrough(file) {
@@ -102,7 +99,7 @@ module.exports = function (opts, cb) {
             if (file.base) { file.base = pathCache[file.path].base; }
             if (file.cwd) { file.cwd = pathCache[file.path].cwd; }
         } else {
-            file.base = opts.base || calculateBase(opts.glob, file) || file.base;
+            file.base = calculateBase(file, opts.glob, opts) || file.base;
             memorizeProperties(file);
         }
     }
@@ -146,15 +143,4 @@ function fileCount(gaze, cb) {
 
 module.exports.fileCount = fileCount;
 
-function calculateBase(globs, file) {
-    if (typeof globs === 'string') { globs = [ globs ]; }
-    for (var i = globs.length - 1; i >= 0; i--) {
-        var p = path.relative(file.cwd || process.cwd(), file.path);
-        if (!minimatch(p, globs[i])) { continue; }
-        return glob2base({
-            minimatch: new minimatch.Minimatch(globs[i])
-        });
-    }
-}
-
-module.exports.calculateBase = calculateBase;
+var calculateBase = module.exports.calculateBase = require('./calculateBase.js');
