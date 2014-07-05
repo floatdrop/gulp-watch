@@ -230,7 +230,7 @@ Stream, that handles `gulp.src` piping.
 
 # License
 
-MIT (c) 2013 Vsevolod Strukchinsky (floatdrop@gmail.com)
+MIT (c) 2014 Vsevolod Strukchinsky (floatdrop@gmail.com)
 
 [npm-url]: https://npmjs.org/package/gulp-watch
 [npm-image]: http://img.shields.io/npm/v/gulp-watch.svg
