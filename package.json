@@ -47,9 +47,9 @@
     "glob": "^4.0.2",
     "glob2base": "~0.0.8",
     "gulp-batch": "~0.4",
-    "gulp-util": "~2.2.6",
-    "minimatch": "~0.3",
-    "vinyl": "^0.2.3",
+    "gulp-util": "~3.0.0",
+    "minimatch": "~0.4",
+    "vinyl": "^0.3.0",
     "vinyl-fs": "~0.3.0"
   },
   "engine": "node >= 0.10"
