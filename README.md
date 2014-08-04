@@ -26,7 +26,7 @@ gulp.task('default', function () {
 });
 ```
 
-To watch entire glob of files and directories you should use `glob` option. In this case gulp-watch will pipe files matching glob downstream, and begin watching them. Moreover, any newly created files that match glob will also be piped downstream, and be watched for changes.
+To watch entire glob of files and directories you should use `glob` option. In this case gulp-watch will pipe files matching glob downstream and begin watching them. Moreover, any newly created files that match glob will also be piped downstream and watched for changes.
 
 ```js
 var gulp = require('gulp'),
@@ -42,12 +42,12 @@ gulp.task('default', function () {
 
 ### Continuous stream of events
 
-This is usefull, when you want blazingly fast rebuilding per-file.
+This is useful when you want blazingly fast rebuilding per-file.
 
-__Be aware:__ `end` event is never happens in this mode, so plugins dependent on it will never print or do whatever they should do on `end` task.
+__Be aware:__ `end` event never happens in this mode, so plugins dependent on it will never print or do whatever they should do on `end` task.
 
 ```js
-// npm i gulp gulp-watch gulp-sass
+// npm and gulp gulp-watch gulp-sass
 
 var gulp = require('gulp'),
     watch = require('gulp-watch'),
@@ -57,7 +57,7 @@ var gulp = require('gulp'),
 gulp.task('default', function () {
     gulp.src('scss/**', { read: false })
         .pipe(watch())
-        .pipe(plumber()) // This will keeps pipes working after error event
+        .pipe(plumber()) // This will keep pipes working after error event
         .pipe(sass())
         .pipe(gulp.dest('./dist/'));
 });
