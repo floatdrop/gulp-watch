@@ -83,13 +83,13 @@ var grep = require('gulp-grep-stream');
 var mocha = require('gulp-mocha');
 var plumber = require('gulp-plumber');
 
-gulp.task('default', function() {
+gulp.task('default', function () {
     gulp.src(['lib/**', 'test/**'], { read: false })
-        .pipe(watch({ emit: 'all' }, function(files) {
+        .pipe(watch({ emit: 'all' }, function (files) {
             files
                 .pipe(grep('*/test/*.js'))
                 .pipe(mocha({ reporter: 'spec' }))
-                .on('error', function() {
+                .on('error', function (err) {
                     if (!/tests? failed/.test(err.stack)) {
                         console.log(err.stack);
                     }
@@ -150,13 +150,13 @@ This options defines emit strategy:
  * `all` - emit all watched files (and folders), when one changes
 
 #### options.passThrough
-Type: `Boolean`  
+Type: `Boolean`
 Default: `true`
 
 This options will pass vinyl objects, that was piped into `watch` to next Stream in pipeline.
 
 #### options.glob
-Type: `String|Array`  
+Type: `String|Array`
 Default: `undefined`
 
 If you want to detect new files, then you have to use this option. When `gulp-watch` gets files from `gulp.src` it looses the information about pattern of matching - therefore it can not detect new files, but with passed pattern in this option, `gulp-watch` will watch all files, that matched pattern and any new files, that was created after watch started and match `glob` pattern.
@@ -168,13 +168,13 @@ Default: `undefined`
 Contains options, that will be passed to Gaze instance. Full list can be found in [gaze readme](https://github.com/shama/gaze#properties).
 
 #### options.base
-Type: `String`  
+Type: `String`
 Default: `undefined`
 
 Use explicit base path for files from glob.
 
 #### options.emitOnGlob
-Type: `Boolean`  
+Type: `Boolean`
 Default: `true`
 
 If `options.glob` is used, gulp-watch, by default, will emit files when beginning to watch them -- much like `gulp.src()`. Otherwise, disable this option.
@@ -189,7 +189,7 @@ watch({glob:'./src/**/*.md', emitOnGlob: false})
 ```
 
 #### options.name
-Type: `String`  
+Type: `String`
 Default: `undefined`
 
 Name of the watcher. If it present in options, you will get more readable output:
@@ -197,13 +197,13 @@ Name of the watcher. If it present in options, you will get more readable output
 ![Naming watchers](https://github.com/floatdrop/gulp-watch/raw/master/img/naming.png)
 
 #### options.verbose
-Type: `Boolean`  
+Type: `Boolean`
 Default: `false`
 
 This options will enable more verbose output (useful for debugging).
 
 #### options.silent
-Type: `Boolean`  
+Type: `Boolean`
 Default: `false`
 
 This options will disable all output (useful for tests).
