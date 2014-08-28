@@ -83,13 +83,13 @@ var grep = require('gulp-grep-stream');
 var mocha = require('gulp-mocha');
 var plumber = require('gulp-plumber');
 
-gulp.task('default', function() {
+gulp.task('default', function () {
     gulp.src(['lib/**', 'test/**'], { read: false })
-        .pipe(watch({ emit: 'all' }, function(files) {
+        .pipe(watch({ emit: 'all' }, function (files) {
             files
                 .pipe(grep('*/test/*.js'))
                 .pipe(mocha({ reporter: 'spec' }))
-                .on('error', function() {
+                .on('error', function (err) {
                     if (!/tests? failed/.test(err.stack)) {
                         console.log(err.stack);
                     }
@@ -141,7 +141,7 @@ This function have three different modes, based on `callback` argument:
 This object passed to [`gaze` options](https://github.com/shama/gaze#properties) directly, so see documentation there. For __batched__ mode we are using [`gulp-batch`](https://github.com/floatdrop/gulp-batch#api), so options from there are available. And of course options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) used too. If you do not want content from watch, then add `read: false` to options object.
 
 #### options.emit
-Type: `String`
+Type: `String`  
 Default: `one`
 
 This options defines emit strategy:
@@ -162,7 +162,7 @@ Default: `undefined`
 If you want to detect new files, then you have to use this option. When `gulp-watch` gets files from `gulp.src` it looses the information about pattern of matching - therefore it can not detect new files, but with passed pattern in this option, `gulp-watch` will watch all files, that matched pattern and any new files, that was created after watch started and match `glob` pattern.
 
 #### options.gaze
-Type: `Object`
+Type: `Object`  
 Default: `undefined`
 
 Contains options, that will be passed to Gaze instance. Full list can be found in [gaze readme](https://github.com/shama/gaze#properties).
