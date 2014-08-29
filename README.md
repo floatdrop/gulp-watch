@@ -238,13 +238,13 @@ Stream, that handles `gulp.src` piping.
 MIT (c) 2014 Vsevolod Strukchinsky (floatdrop@gmail.com)
 
 [npm-url]: https://npmjs.org/package/gulp-watch
-[npm-image]: http://img.shields.io/npm/v/gulp-watch.svg
+[npm-image]: http://img.shields.io/npm/v/gulp-watch.svg?style=flat
 
 [travis-url]: https://travis-ci.org/floatdrop/gulp-watch
-[travis-image]: http://img.shields.io/travis/floatdrop/gulp-watch.svg
+[travis-image]: http://img.shields.io/travis/floatdrop/gulp-watch.svg?style=flat
 
 [coveralls-url]: https://coveralls.io/r/floatdrop/gulp-watch
-[coveralls-image]: http://img.shields.io/coveralls/floatdrop/gulp-watch.svg
+[coveralls-image]: http://img.shields.io/coveralls/floatdrop/gulp-watch.svg?style=flat
 
 [depstat-url]: https://david-dm.org/floatdrop/gulp-watch
-[depstat-image]: https://david-dm.org/floatdrop/gulp-watch.svg?theme=shields.io
+[depstat-image]: http://img.shields.io/david/floatdrop/gulp-watch.svg?style=flat
