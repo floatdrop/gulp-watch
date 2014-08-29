@@ -108,11 +108,14 @@ var filter = require('gulp-filter');
 function isAdded(file) {
     return file.event === 'added';
 }
+
+var filterAdded = filter(isAdded);
+
 gulp.task('default', function () {
     watch({glob: '**/*.js'})
-        .pipe(filter(isAdded))
+        .pipe(filterAdded)
         .pipe(gulp.dest('newfiles'))
-        .pipe(filter.restore())
+        .pipe(filterAdded.restore())
         .pipe(gulp.dest('oldfiles'));
 });
 ```
