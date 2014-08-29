@@ -9,7 +9,7 @@ var watch = require('..'),
 
 describe('gulp-watch', function () {
     it('should throw, if we provide invalid callback', function () {
-        assert.throws(watch.bind(null, 'string'), /Provided callback is not a function/);
+        assert.throws(watch.bind(null, 'string', 'string'), /Provided callback is not a function/);
     });
 
     afterEach(function (done) {

@@ -10,7 +10,13 @@ var Duplex = require('stream').Duplex,
 module.exports = function (opts, cb) {
     var Gaze = require('gaze');
 
-    if (typeof opts !== 'object') {
+    opts = opts || {};
+
+    if (typeof opts === 'string' || Array.isArray(opts)) {
+        opts = { glob: opts };
+    }
+
+    if (typeof opts === 'function') {
         cb = opts;
         opts = {};
     }

@@ -33,7 +33,7 @@ var gulp = require('gulp'),
     watch = require('gulp-watch');
 
 gulp.task('default', function () {
-    watch({glob: 'scss/**/*.scss'}, function(files) {
+    watch('scss/**/*.scss', function(files) {
         return files.pipe(sass())
             .pipe(gulp.dest('./dist/'));
     });
@@ -67,7 +67,7 @@ Same as before - version with `glob` option:
 
 ```js
 gulp.task('default', function () {
-    watch({ glob: 'sass/**/*.scss' })
+    watch('sass/**/*.scss')
         .pipe(plumber())
         .pipe(sass())
         .pipe(gulp.dest('./dist/'));
@@ -112,7 +112,7 @@ function isAdded(file) {
 var filterAdded = filter(isAdded);
 
 gulp.task('default', function () {
-    watch({glob: '**/*.js'})
+    watch('**/*.js')
         .pipe(filterAdded)
         .pipe(gulp.dest('newfiles'))
         .pipe(filterAdded.restore())
@@ -139,7 +139,9 @@ This function have three different modes, based on `callback` argument:
  * `events` - is `Stream` of incoming events. Events will be grouped by timeout to prevent many tasks execution by commands like `git pull`.
  * `done` - is callback for your function signal to batch, that you are done. This allows to run your callback as soon as previous end.
 
-### Options:
+### Options
+
+If type of `options` is `string` or `Array` - it will be wrapped into object `{ glob: options }`. __Notice__ you can not pass glob as `string` or `Array` and pass additional options in same time (this will break api compatibility).
 
 This object passed to [`gaze` options](https://github.com/shama/gaze#properties) directly, so see documentation there. For __batched__ mode we are using [`gulp-batch`](https://github.com/floatdrop/gulp-batch#api), so options from there are available. And of course options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) used too. If you do not want content from watch, then add `read: false` to options object.
 
