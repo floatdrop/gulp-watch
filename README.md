@@ -233,6 +233,10 @@ Returned `Stream` from constructor have some useful methods:
 
 `Stream` that handles `gulp.src` piping.
 
+## Tests
+
+To run tests just type `npm test` (after you install dependencies with `npm install`).
+
 # License
 
 MIT (c) 2014 Vsevolod Strukchinsky (floatdrop@gmail.com)
