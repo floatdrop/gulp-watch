@@ -67,9 +67,7 @@ module.exports = function (opts, cb) {
 
     duplex.gaze.on('all', function (event, filepath) {
         if (!opts.silent) {
-            logEvent(event, opts.logRelativePath ?
-                path.relative(process.cwd(), filepath) :
-                path.basename(filepath),
+            logEvent(event, opts.verbose ? filepath : path.basename(filepath),
             opts);
         }
         var glob = [ filepath ];
