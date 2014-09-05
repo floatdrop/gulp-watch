@@ -1,11 +1,12 @@
 'use strict';
 
-var PluginError = require('gulp-util').PluginError,
-    Readable = require('readable-stream').Readable,
+var util = require('gulp-util'),
+    PluginError = require('gulp-util').PluginError,
+    through = require('through2'),
     batch = require('gulp-batch'),
     File = require('vinyl'),
-    getContents = require('vinyl-fs/lib/src/getContents'),
-    getStats = require('vinyl-fs/lib/src/getStats'),
+    getContents = require('./lib/getContents'),
+    getStats = require('./lib/getStats'),
     glob2base = require('glob2base'),
     path2glob = require('path2glob');
 
@@ -25,8 +26,7 @@ module.exports = function (globs, opts, cb) {
 
     if (!opts) opts = {};
 
-    var outputStream = new Readable({ objectMode: true });
-    outputStream._read = function _read() { };
+    var outputStream = through.obj();
 
     if (cb) {
         cb = batch(opts, cb);
@@ -38,7 +38,7 @@ module.exports = function (globs, opts, cb) {
     gaze.on('all', processEvent);
 
     function processEvent(event, filepath) {
-        outputStream.push(vinylFromEvent(event, filepath));
+        outputStream.write(vinylFromEvent(event, filepath));
     }
 
     function vinylFromEvent(event, filepath) {
@@ -50,11 +50,10 @@ module.exports = function (globs, opts, cb) {
             path: filepath
         });
 
+        log(event, vinyl);
         vinyl.event = event;
 
-        if (event === 'delete') {
-            return vinyl;
-        }
+        return vinyl;
     }
 
     outputStream = outputStream
@@ -67,6 +66,18 @@ module.exports = function (globs, opts, cb) {
 
     if (cb) {
         outputStream.on('data', cb);
+    }
+
+    gaze.on('error', outputStream.emit.bind(outputStream, 'error'));
+    gaze.on('ready', outputStream.emit.bind(outputStream, 'ready'));
+    gaze.on('end', outputStream.emit.bind(outputStream, 'end'));
+
+    outputStream.close = function () { gaze.close(); };
+
+    function log(event, file) {
+        var msg = [util.colors.magenta(file.relative), 'was', event];
+        if (opts.name) { msg.unshift(util.colors.cyan(opts.name) + ' saw'); }
+        util.log.apply(util, msg);
     }
 
     return outputStream;
