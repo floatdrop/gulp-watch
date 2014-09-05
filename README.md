@@ -39,6 +39,8 @@ gulp.task('default', function () {
 
 > __Protip:__ until gulpjs 4.0 is released, you can use [gulp-plumber](https://github.com/floatdrop/gulp-plumber) to prevent stops on errors.
 
+More examples can be found in [`docs/readme.md`](/docs/readme.md).
+
 ## API
 
 ### watch(glob, [options, callback])
