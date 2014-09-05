@@ -40,7 +40,11 @@ module.exports = function (globs, opts, cb) {
     function processEvent(event, filepath) {
         var glob = path2glob(filepath, globs, opts);
 
-        if (!glob) { return; } // Fix for directories, that not match globs
+        if (!glob) {
+            throw new PluginError('gulp-watch',
+                'Could not match glob to filepath. Globs: ' + globs + '; Filepath: ' + filepath
+            );
+        }
 
         var vinyl = new File({
             cwd: opts.cwd || process.cwd(),
@@ -50,15 +54,20 @@ module.exports = function (globs, opts, cb) {
 
         log(event, vinyl);
         vinyl.event = event;
-
-        initialStream.write(vinyl);
+        if (event !== 'deleted') {
+            initialStream.write(vinyl);
+        } else {
+            resultingStream.write(vinyl);
+        }
     }
 
-    var resultingStream = initialStream.pipe(getStats(opts));
+    var getStream = initialStream.pipe(getStats(opts));
 
     if (opts.read !== false) {
-        resultingStream = resultingStream.pipe(getContents(opts));
+        getStream = getStream.pipe(getContents(opts));
     }
+
+    var resultingStream = getStream.pipe(through.obj());
 
     if (cb) {
         resultingStream.on('data', cb);
