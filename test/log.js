@@ -19,7 +19,7 @@ function fixtures(glob) {
     return join(__dirname, 'fixtures', glob);
 }
 
-describe('logs', function () {
+describe('log', function () {
     beforeEach(function () {
         sinon.spy(gutilStub, 'log');
     });
@@ -28,7 +28,7 @@ describe('logs', function () {
         gutilStub.log.restore();
     });
 
-    it('should file name', function (done) {
+    it('should print file name', function (done) {
         var w = watch(fixtures('*.js'));
         w.on('ready', touch(fixtures('index.js')))
         .on('data', function () {
@@ -50,7 +50,7 @@ describe('logs', function () {
         });
     });
 
-    it('should print custom name', function (done) {
+    it('should print custom watcher name', function (done) {
         var w = watch(fixtures('*.js'), { name: 'Watch' });
         w.on('ready', touch(fixtures('index.js')))
         .on('data', function () {
