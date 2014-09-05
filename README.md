@@ -1,6 +1,8 @@
 # [gulp](https://github.com/gulpjs/gulp)-watch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
 > Watch, that actually is an endless stream
 
+###  
+
 This is an implementation of [`gulp.watch`](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatchglob—opts-cb) with an endless-stream approach. If `gulp.watch` is working for you, stick with it; otherwise, you can try this `gulp-watch` plugin.
 
 The main reason for `gulp-watch`'s existence is that it can easily achieve per-file rebuilding on file change:
@@ -100,6 +102,11 @@ Returned `Stream` from constructor have some useful methods:
  * `end` — all files are stop being watched.
  * `ready` — just re-emitted event from `gaze`.
  * `error` — when something happened inside callback, you will get notified.
+
+### Migration from 0.7.x to 1.0.0
+
+ * __watch is not emmiting files at start__ - this is misguiding option, that pushes you to place watch before main tasks. It is better to give watch all globs and callback `function () { gulp.start('build'); }`.
+ * __watch is now pass through stream__ - which means that streaming files into watch will not add them to gaze. It is very hard to maintain, because watch is not aware about `glob`, from which this files come from and can not re-create vinyl object properly without maintaining cache of the `base` properties of incoming files (yuck).
 
 # License
 
