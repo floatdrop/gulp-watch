@@ -1,4 +1,5 @@
 {
+    "-W068": true,
     "node": true,
     "esnext": true,
     "bitwise": true,

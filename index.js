@@ -26,7 +26,7 @@ module.exports = function (globs, opts, cb) {
 
     if (!opts) opts = {};
 
-    var outputStream = through.obj();
+    var initialStream = through.obj();
 
     if (cb) {
         cb = batch(opts, cb);
@@ -38,7 +38,7 @@ module.exports = function (globs, opts, cb) {
     gaze.on('all', processEvent);
 
     function processEvent(event, filepath) {
-        outputStream.write(vinylFromEvent(event, filepath));
+        initialStream.write(vinylFromEvent(event, filepath));
     }
 
     function vinylFromEvent(event, filepath) {
@@ -56,23 +56,21 @@ module.exports = function (globs, opts, cb) {
         return vinyl;
     }
 
-    outputStream = outputStream
-        .pipe(getStats(opts));
+    var resultingStream = initialStream.pipe(getStats(opts));
 
     if (opts.read !== false) {
-        outputStream = outputStream
-            .pipe(getContents(opts));
+        resultingStream = resultingStream.pipe(getContents(opts));
     }
 
     if (cb) {
-        outputStream.on('data', cb);
+        resultingStream.on('data', cb);
     }
 
-    gaze.on('error', outputStream.emit.bind(outputStream, 'error'));
-    gaze.on('ready', outputStream.emit.bind(outputStream, 'ready'));
-    gaze.on('end', outputStream.emit.bind(outputStream, 'end'));
+    gaze.on('error', resultingStream.emit.bind(resultingStream, 'error'));
+    gaze.on('ready', resultingStream.emit.bind(resultingStream, 'ready'));
+    gaze.on('end', resultingStream.emit.bind(resultingStream, 'end'));
 
-    outputStream.close = function () { gaze.close(); };
+    resultingStream.close = function () { gaze.close(); };
 
     function log(event, file) {
         var msg = [util.colors.magenta(file.relative), 'was', event];
@@ -80,5 +78,5 @@ module.exports = function (globs, opts, cb) {
         util.log.apply(util, msg);
     }
 
-    return outputStream;
+    return resultingStream;
 };

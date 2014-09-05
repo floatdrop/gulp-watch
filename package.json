@@ -44,7 +44,6 @@
     "gulp-batch": "~0.4",
     "gulp-util": "~3.0.0",
     "path2glob": "0.0.1",
-    "readable-stream": "^1.0.31",
     "strip-bom": "^1.0.0",
     "through2": "^0.6.1",
     "vinyl": "~0.4.3"
