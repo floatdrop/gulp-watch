@@ -38,11 +38,9 @@ module.exports = function (globs, opts, cb) {
     gaze.on('all', processEvent);
 
     function processEvent(event, filepath) {
-        initialStream.write(vinylFromEvent(event, filepath));
-    }
-
-    function vinylFromEvent(event, filepath) {
         var glob = path2glob(filepath, globs, opts);
+
+        if (!glob) { return; } // Fix for directories, that not match globs
 
         var vinyl = new File({
             cwd: opts.cwd || process.cwd(),
@@ -53,7 +51,7 @@ module.exports = function (globs, opts, cb) {
         log(event, vinyl);
         vinyl.event = event;
 
-        return vinyl;
+        initialStream.write(vinyl);
     }
 
     var resultingStream = initialStream.pipe(getStats(opts));

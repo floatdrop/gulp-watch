@@ -29,6 +29,7 @@
     "mocha": "~1.14.0",
     "mocha-lcov-reporter": "0.0.1",
     "proxyquire": "^1.0.1",
+    "rimraf": "^2.2.8",
     "should": "~3.0.1",
     "sinon": "^1.9.1",
     "stream-assert": "^1.0.1",
