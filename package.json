@@ -11,7 +11,7 @@
   "scripts": {
     "test": "mocha -R spec",
     "coverage": "istanbul cover node_modules/.bin/_mocha --report html -- -R spec",
-    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -23,17 +23,16 @@
     "url": "https://github.com/floatdrop/gulp-watch/issues"
   },
   "devDependencies": {
-    "coveralls": "~2.6.0",
-    "istanbul": "~0.1.44",
-    "jshint": "^2.5.0",
-    "mocha": "~1.14.0",
-    "mocha-lcov-reporter": "0.0.1",
+    "coveralls": "^2.7.0",
+    "istanbul": "^0.3.0",
+    "mocha": "~1.21.4",
+    "mocha-lcov-reporter": "^0.0.1",
     "proxyquire": "^1.0.1",
     "rimraf": "^2.2.8",
-    "should": "~3.0.1",
+    "should": "~4.0.4",
     "sinon": "^1.9.1",
     "stream-assert": "^1.0.1",
-    "strip-ansi": "^0.2.1",
+    "strip-ansi": "^2.0.0",
     "touch": "0.0.3"
   },
   "dependencies": {
