@@ -15,6 +15,7 @@ describe.skip('directories', function () {
         rimraf.sync(fixtures('test'));
     });
 
+    // This test is not responding on directories creation
     it('should directory on creation', function (done) {
         var w = watch(fixtures('**'));
         w.on('ready', function () {
