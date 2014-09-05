@@ -61,35 +61,11 @@ Events are grouped with [`gulp-batch`](https://github.com/floatdrop/gulp-batch).
 
 This object is passed to [`gaze` options](https://github.com/shama/gaze#properties) directly (refer to [`gaze` documentation](https://github.com/shama/gaze)). For __batched__ mode, we are using [`gulp-batch`](https://github.com/floatdrop/gulp-batch#api), so options from there are also available. And of course options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are used too. If you do not want content from `watch`, then add `read: false` to the `options` object.
 
-#### options.emit
-Type: `String`  
-Default: `one`
-
-This options defines emit strategy:
-
- * `one` — emit only changed file
- * `all` — emit all watched files (and folders), when one changes
-
 #### options.base
 Type: `String`  
 Default: `undefined`
 
 Use explicit base path for files from `glob`.
-
-#### options.emitOnGlob
-Type: `Boolean`  
-Default: `true`
-
-By default, `gulp-watch` will emit files when beginning to watch them — much like `gulp.src()`.
-
-Example:
-```js
-// gulp-watch will not emit anything on start, only when when something happened
-watch({glob:'./src/**/*.md', emitOnGlob: false})
-    .pipe(plumber())
-    .pipe(anotherPlugin(opts))
-    .pipe(gulp.dest('./html'))
-```
 
 #### options.name
 Type: `String`  
