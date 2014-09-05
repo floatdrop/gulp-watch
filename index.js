@@ -54,6 +54,7 @@ module.exports = function (globs, opts, cb) {
 
         log(event, vinyl);
         vinyl.event = event;
+
         if (event !== 'deleted') {
             initialStream.write(vinyl);
         } else {
