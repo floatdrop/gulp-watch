@@ -107,6 +107,7 @@ Returned `Stream` from constructor have some useful methods:
 
  * __watch is not emmiting files at start__ - this is misguiding option, that pushes you to place watch before main tasks. It is better to give watch all globs and callback `function () { gulp.start('build'); }`.
  * __watch is now pass through stream__ - which means that streaming files into watch will not add them to gaze. It is very hard to maintain, because watch is not aware about `glob`, from which this files come from and can not re-create vinyl object properly without maintaining cache of the `base` properties of incoming files (yuck).
+ * __array of tasks is not accepted as callback__ - this was not working anyway, but rationale behind it - requiring gulp and calling internal method start is bad. This feature will become more clear, when gulp 4.0.0 will be released with new task system. For now you can use `function () { gulp.start(['build']); }` workaround.
 
 # License
 
