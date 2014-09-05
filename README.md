@@ -45,7 +45,7 @@ More examples can be found in [`docs/readme.md`](/docs/readme.md).
 
 ### watch(glob, [options, callback])
 
-Creates watcher that will spy on files that were matched by `glob`.
+Creates watcher that will spy on files that were matched by `glob` which can be a [`node-glob`](https://github.com/isaacs/node-glob) string or array of strings.
 
 This function has two behaviors modes based on presence of `callback` argument:
 
