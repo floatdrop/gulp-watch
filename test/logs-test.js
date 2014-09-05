@@ -37,8 +37,8 @@ describe('logging', function () {
                 if (file === 1) { utils.touch('test/fixtures/test.js')(); }
                 if (file === 2) {
                     gutilStub.log.calledTwice.should.be.eql(true);
-                    gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql('test/fixtures/test.js was changed');
-                    gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql('test/fixtures/test.js was changed');
+                    gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql('test.js was changed');
+                    gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql('test.js was changed');
                     watcher.on('end', done);
                     watcher.close();
                 }
@@ -55,8 +55,8 @@ describe('logging', function () {
                 if (file === 2) {
                     gutilStub.log.calledThrice.should.be.eql(true);
                     gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql('1 file was added from pipe');
-                    gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql('test/fixtures/test.js was changed');
-                    gutilStub.log.thirdCall.args.join(' ').stripAnsi().should.eql('test/fixtures/test.js was changed');
+                    gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql('test.js was changed');
+                    gutilStub.log.thirdCall.args.join(' ').stripAnsi().should.eql('test.js was changed');
                     watcher.on('end', done);
                     watcher.close();
                 }
@@ -69,7 +69,7 @@ describe('logging', function () {
         var w = gulp.src(path).pipe(watch({ verbose: true, silent: false }));
         w.on('finish', function () {
             gutilStub.log.calledThrice.should.be.eql(true);
-            gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql('test/fixtures/test.js was added to watch');
+            gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql('test.js was added to watch');
             gutilStub.log.thirdCall.args.join(' ').stripAnsi().should.eql('1 file was added from pipe');
             w.on('end', done);
             w.close();
@@ -81,7 +81,7 @@ describe('logging', function () {
         var w = gulp.src('test/fixtures/test.js').pipe(watch({ name: name, verbose: true, silent: false }));
         w.on('finish', function () {
             gutilStub.log.calledThrice.should.be.eql(true);
-            gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql(name + ' saw test/fixtures/test.js was added to watch');
+            gutilStub.log.secondCall.args.join(' ').stripAnsi().should.eql(name + ' saw test.js was added to watch');
             gutilStub.log.thirdCall.args.join(' ').stripAnsi().should.eql(name + ' saw 1 file was added from pipe');
             w.on('end', done);
             w.close();
@@ -96,7 +96,7 @@ describe('logging', function () {
         });
         setTimeout(function () {
             gutilStub.log.calledOnce.should.be.eql(true);
-            gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql('test/fixtures/test.js was passed through');
+            gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql('test.js was passed through');
             done();
         }, 100);
     });
@@ -111,7 +111,7 @@ describe('logging', function () {
         });
         setTimeout(function () {
             gutilStub.log.calledOnce.should.be.eql(true);
-            gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql(name + ' saw test/fixtures/test.js was passed through');
+            gutilStub.log.firstCall.args.join(' ').stripAnsi().should.eql(name + ' saw test.js was passed through');
             done();
         }, 100);
     });

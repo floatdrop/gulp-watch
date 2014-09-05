@@ -45,7 +45,7 @@ module.exports = function (opts, cb) {
     duplex.gaze = new Gaze(opts.glob, opts.gaze || {});
     duplex._write = function _write(file, encoding, done) {
         duplex.gaze.add(file.path, function () {
-            if (!opts.silent && opts.verbose) { logEvent('added to watch', file.path, opts); }
+            if (!opts.silent && opts.verbose) { logEvent('added to watch', file.relative, opts); }
             done();
         });
         memorizeProperties(file);
@@ -66,7 +66,12 @@ module.exports = function (opts, cb) {
     duplex.gaze.on('ready', duplex.emit.bind(duplex, 'ready'));
 
     duplex.gaze.on('all', function (event, filepath) {
-        if (!opts.silent) { logEvent(event, filepath, opts); }
+        if (!opts.silent) {
+            logEvent(event, opts.logRelativePath ?
+                path.relative(process.cwd(), filepath) :
+                path.basename(filepath),
+            opts);
+        }
         var glob = [ filepath ];
         if (opts.emit === 'all') {
             glob = glob.concat(opts.glob);
@@ -91,7 +96,7 @@ module.exports = function (opts, cb) {
 
     function passThrough(file) {
         if (!opts.silent && opts.verbose) {
-            logEvent('passed through', file.path, opts);
+            logEvent('passed through', file.relative, opts);
         }
         restoreProperties(file, opts);
         cb(file);
@@ -121,7 +126,7 @@ module.exports = function (opts, cb) {
 };
 
 function logEvent(event, filepath, opts) {
-    var msg = [gutil.colors.magenta(path.relative(__dirname, filepath)), 'was', event];
+    var msg = [gutil.colors.magenta(filepath), 'was', event];
     if (opts.name) { msg.unshift(gutil.colors.cyan(opts.name) + ' saw'); }
     gutil.log.apply(gutil, msg);
 }

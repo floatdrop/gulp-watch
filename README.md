@@ -213,6 +213,12 @@ Default: `false`
 
 This options will disable all output (useful for tests).
 
+#### options.logRelativePath
+Type: `Boolean`
+Default: `false`
+
+Logs names of files relative to `process.cwd()`
+
 ### Methods
 
 Returned `Stream` from constructor have some useful methods:
