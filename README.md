@@ -85,12 +85,6 @@ Default: `false`
 
 This options will enable more verbose output (useful for debugging).
 
-#### options.silent
-Type: `Boolean`  
-Default: `false`
-
-This options will disable all output (useful for tests).
-
 ### Methods
 
 Returned `Stream` from constructor have some useful methods:

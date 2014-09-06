@@ -33,22 +33,20 @@ module.exports = function (globs, opts, cb) {
     }
 
     var Gaze = require('gaze');
-    var gaze = new Gaze(globs);
+    var gaze = new Gaze(globs, opts);
 
     gaze.on('all', processEvent);
 
     function processEvent(event, filepath) {
         var glob = path2glob(filepath, globs, opts);
 
-        if (!glob) {
-            throw new PluginError('gulp-watch',
-                'Could not match glob to filepath. Globs: ' + globs + '; Filepath: ' + filepath
-            );
+        if (!glob && opts.verbose !== false) {
+            log('not matched by globs', { relative: filepath });
         }
 
         var vinyl = new File({
             cwd: opts.cwd || process.cwd(),
-            base: opts.base || glob2base(glob),
+            base: opts.base || (glob ? glob2base(glob) : undefined),
             path: filepath
         });
 
