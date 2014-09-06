@@ -2,6 +2,8 @@ var fs = require('fs');
 
 module.exports = function touch(path, content) {
     return function () {
-        fs.writeFileSync(path, content || 'wadap');
+        setTimeout(function () {
+            fs.writeFileSync(path, content || 'wadap');
+        }, 1000);
     };
 };
