@@ -3,22 +3,25 @@
 
 ###  
 
-This is an implementation of [`gulp.watch`](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatchglob—opts-cb) with an endless-stream approach. If `gulp.watch` is working for you, stick with it; otherwise, you can try this `gulp-watch` plugin.
+This is an __reimplementation__ of bundled [`gulp.watch`](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatchglob—opts-cb) with an endless-stream approach. If `gulp.watch` is working for you, stick with it; otherwise, you can try this `gulp-watch` plugin.
 
 The main reason for `gulp-watch`'s existence is that it can easily achieve per-file rebuilding on file change:
 
 ![Awesome demonstration](https://github.com/floatdrop/gulp-watch/raw/master/img/2014-01-09.gif)
 
+## Installation
+
+Run `npm install gulp-watch`.
+
 ## Usage
 
 ```js
 var gulp = require('gulp'),
-    concat = require('gulp-concat');
+    watch = require('gulp-watch');
 
 gulp.task('default', function () {
     watch('css/**/*.css', function(files) {
-        return files.pipe(concat('index.css'))
-            .pipe(gulp.dest('./dist/'));
+        return files.pipe(gulp.dest('./dist/'));
     }));
 });
 ```
@@ -26,16 +29,11 @@ gulp.task('default', function () {
 Or as continious stream:
 
 ```js
-// Run before: `npm install gulp gulp-watch gulp-sass`
-
 var gulp = require('gulp'),
-    watch = require('gulp-watch'),
-    concat = require('gulp-concat');
+    watch = require('gulp-watch');
 
 gulp.task('default', function () {
-    watch('css/**/*.css')
-        .pipe(concat('index.css'))
-        .pipe(gulp.dest('./dist/'));
+    watch('css/**/*.css').pipe(gulp.dest('./dist/'));
 });
 ```
 
