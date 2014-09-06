@@ -1,51 +1,66 @@
-/* global describe, it */
+/* global describe, it, afterEach */
 
 var watch = require('..');
 var join = require('path').join;
 var touch = require('./touch.js');
+var rimraf = require('rimraf');
 require('should');
 
 function fixtures(glob) {
     return join(__dirname, 'fixtures', glob);
 }
 
-describe('stream', function () {
+describe.only('stream', function () {
+    var w;
+
+    afterEach(function (done) {
+        w.on('end', done);
+        w.close();
+    });
+
     it('should emit ready and end', function (done) {
-        var w = watch(fixtures('*.js'));
-        w.on('ready', function () {
-            w.on('end', done);
-            w.close();
+        w = watch(fixtures('*.js'));
+        w.on('ready', function () { done(); });
+    });
+
+    it('should emit added file', function (done) {
+        w = watch(fixtures('*.js'));
+        w.on('ready', touch(fixtures('new.js')))
+        .on('data', function (file) {
+            file.relative.should.eql('new.js');
+            file.event.should.eql('added');
+            done();
+        });
+        w.on('end', function () {
+            rimraf.sync(fixtures('new.js'));
         });
     });
 
     it('should emit changed file', function (done) {
-        var w = watch(fixtures('*.js'));
+        w = watch(fixtures('*.js'));
         w.on('ready', touch(fixtures('index.js')))
         .on('data', function (file) {
             file.relative.should.eql('index.js');
             file.event.should.eql('changed');
-            w.on('end', done);
-            w.close();
+            done();
         });
     });
 
     it('should emit changed file with stream contents', function (done) {
-        var w = watch(fixtures('*.js'), { buffer: false });
+        w = watch(fixtures('*.js'), { buffer: false });
         w.on('ready', touch(fixtures('index.js')))
         .on('data', function (file) {
             file.contents.should.have.property('readable', true);
-            w.on('end', done);
-            w.close();
+            done();
         });
     });
 
     it('should emit changed file with stats', function (done) {
-        var w = watch(fixtures('*.js'), { buffer: false });
+        w = watch(fixtures('*.js'), { buffer: false });
         w.on('ready', touch(fixtures('index.js')))
         .on('data', function (file) {
             file.should.have.property('stat');
-            w.on('end', done);
-            w.close();
+            done();
         });
     });
 });
