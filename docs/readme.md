@@ -1,7 +1,28 @@
 # Recipies
 
+ * [Prevent pipe breaking on errors](#prevent-pipe-breaking-on-errors)
  * [Starting tasks on events](#starting-tasks-on-events)
  * [Filtering custom events](#filtering-custom-events)
+
+### Prevent pipe breaking on errors
+
+> Until gulp 4.0 is released this is actual information
+
+When you pipe one Stream to another and do not attaching `on('error')` handler they will `unpipe` on every error. This is frustraiting, when you have watcher and something like `coffeescript` builder. It is pretty easy to put typo in file and breake pipeline forever. To avoid this, you can use [`gulp-plumber`](https://github.com/floatdrop/gulp-plumber):
+
+```js
+var gulp = require('gulp');
+var watch = require('gulp-watch');
+var plumber = require('gulp-plumber');
+var sass = require('gulp-ruby-sass');
+
+gulp.task('styles', function () {  
+    watch('scss/*.scss')
+        .pipe(plumber())
+        .pipe(sass())
+        .pipe(gulp.dest('dist/'));
+});
+```
 
 ### Starting tasks on events
 
