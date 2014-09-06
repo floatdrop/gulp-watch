@@ -20,44 +20,45 @@ function fixtures(glob) {
 }
 
 describe('log', function () {
+    var w;
+
     beforeEach(function () {
         sinon.spy(gutilStub, 'log');
     });
 
-    afterEach(function () {
+    afterEach(function (done) {
         gutilStub.log.restore();
+        w.on('end', done);
+        w.close();
     });
 
     it('should print file name', function (done) {
-        var w = watch(fixtures('*.js'));
-        w.on('ready', touch(fixtures('index.js')))
-        .on('data', function () {
+        w = watch(fixtures('*.js'));
+        w.on('ready', touch(fixtures('index.js')));
+        w.on('data', function () {
             gutilStub.log.calledOnce.should.be.eql(true);
             strip(gutilStub.log.firstCall.args.join(' ')).should.eql('index.js was changed');
-            w.on('end', done);
-            w.close();
+            done();
         });
     });
 
     it('should print relative file name', function (done) {
-        var w = watch(fixtures('**/*.js'));
-        w.on('ready', touch(fixtures('folder/index.js')))
-        .on('data', function () {
+        w = watch(fixtures('**/*.js'));
+        w.on('ready', touch(fixtures('folder/index.js')));
+        w.on('data', function () {
             gutilStub.log.calledOnce.should.be.eql(true);
             strip(gutilStub.log.firstCall.args.join(' ')).should.eql('folder/index.js was changed');
-            w.on('end', done);
-            w.close();
+            done();
         });
     });
 
     it('should print custom watcher name', function (done) {
-        var w = watch(fixtures('*.js'), { name: 'Watch' });
-        w.on('ready', touch(fixtures('index.js')))
-        .on('data', function () {
+        w = watch(fixtures('*.js'), { name: 'Watch' });
+        w.on('ready', touch(fixtures('index.js')));
+        w.on('data', function () {
             gutilStub.log.calledOnce.should.be.eql(true);
             strip(gutilStub.log.firstCall.args.join(' ')).should.eql('Watch saw index.js was changed');
-            w.on('end', done);
-            w.close();
+            done();
         });
     });
 

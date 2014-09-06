@@ -10,7 +10,7 @@ function fixtures(glob) {
     return join(__dirname, 'fixtures', glob);
 }
 
-describe.only('stream', function () {
+describe('stream', function () {
     var w;
 
     afterEach(function (done) {
@@ -24,22 +24,23 @@ describe.only('stream', function () {
     });
 
     it('should emit added file', function (done) {
-        w = watch(fixtures('*.js'));
-        w.on('ready', touch(fixtures('new.js')))
-        .on('data', function (file) {
-            file.relative.should.eql('new.js');
-            file.event.should.eql('added');
+        w = watch('test/fixtures/*.js');
+        w.on('ready', touch(fixtures('new.js')));
+        w.on('data', function (file) {
+            try {
+                file.relative.should.eql('new.js');
+                file.event.should.eql('added');
+            } finally {
+                rimraf.sync(fixtures('new.js'));
+            }
             done();
-        });
-        w.on('end', function () {
-            rimraf.sync(fixtures('new.js'));
         });
     });
 
     it('should emit changed file', function (done) {
         w = watch(fixtures('*.js'));
-        w.on('ready', touch(fixtures('index.js')))
-        .on('data', function (file) {
+        w.on('ready', touch(fixtures('index.js')));
+        w.on('data', function (file) {
             file.relative.should.eql('index.js');
             file.event.should.eql('changed');
             done();
@@ -48,8 +49,8 @@ describe.only('stream', function () {
 
     it('should emit changed file with stream contents', function (done) {
         w = watch(fixtures('*.js'), { buffer: false });
-        w.on('ready', touch(fixtures('index.js')))
-        .on('data', function (file) {
+        w.on('ready', touch(fixtures('index.js')));
+        w.on('data', function (file) {
             file.contents.should.have.property('readable', true);
             done();
         });
@@ -57,8 +58,8 @@ describe.only('stream', function () {
 
     it('should emit changed file with stats', function (done) {
         w = watch(fixtures('*.js'), { buffer: false });
-        w.on('ready', touch(fixtures('index.js')))
-        .on('data', function (file) {
+        w.on('ready', touch(fixtures('index.js')));
+        w.on('data', function (file) {
             file.should.have.property('stat');
             done();
         });

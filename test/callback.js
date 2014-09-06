@@ -1,4 +1,4 @@
-/* global describe, it */
+/* global describe, it, afterEach */
 
 var assert = require('stream-assert');
 var watch = require('..');
@@ -11,17 +11,21 @@ function fixtures(glob) {
 }
 
 describe('callback', function () {
+    var w;
+
+    afterEach(function (done) {
+        w.on('end', done);
+        w.close();
+    });
+
     it('should be called on event', function (done) {
-        var w = watch(fixtures('*.js'), function (files) {
+        w = watch(fixtures('*.js'), function (files) {
             files
                 .pipe(assert.first(function (file) {
                     file.relative.should.eql('index.js');
                     file.event.should.eql('changed');
                 }))
-                .on('end', function (err) {
-                    w.on('end', done.bind(null, err));
-                    w.close();
-                });
+                .on('end', done);
         });
         w.on('ready', touch(fixtures('index.js')));
     });
