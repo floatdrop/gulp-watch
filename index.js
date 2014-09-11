@@ -4,9 +4,8 @@ var util = require('gulp-util'),
     PluginError = require('gulp-util').PluginError,
     through = require('through2'),
     batch = require('gulp-batch'),
+    vinyl = require('vinyl-file'),
     File = require('vinyl'),
-    getContents = require('./lib/getContents'),
-    getStats = require('./lib/getStats'),
     glob2base = require('glob2base'),
     path2glob = require('path2glob');
 
@@ -26,7 +25,9 @@ module.exports = function (globs, opts, cb) {
 
     if (!opts) opts = {};
 
-    var initialStream = through.obj();
+    var baseForced = !!opts.base;
+
+    var outputStream = through.obj();
 
     if (cb) {
         cb = batch(opts, cb);
@@ -37,6 +38,13 @@ module.exports = function (globs, opts, cb) {
 
     gaze.on('all', processEvent);
 
+    function write(event, err, file) {
+        if (err) { return outputStream.emit('error', err); }
+        log(event, file);
+        file.event = event;
+        outputStream.write(file);
+    }
+
     function processEvent(event, filepath) {
         var glob = path2glob(filepath, globs, opts);
 
@@ -44,39 +52,26 @@ module.exports = function (globs, opts, cb) {
             log('not matched by globs', { relative: filepath });
         }
 
-        var vinyl = new File({
-            cwd: opts.cwd || process.cwd(),
-            base: opts.base || (glob ? glob2base(glob) : undefined),
-            path: filepath
-        });
+        opts.path = filepath;
 
-        log(event, vinyl);
-        vinyl.event = event;
+        if (!baseForced) opts.base = glob ? glob2base(glob) : undefined;
 
-        if (event !== 'deleted') {
-            initialStream.write(vinyl);
-        } else {
-            resultingStream.write(vinyl);
+        if (event === 'deleted') {
+            return write(event, null, new File(opts));
         }
+
+        vinyl.read(filepath, opts, write.bind(null, event));
     }
-
-    var getStream = initialStream.pipe(getStats(opts));
-
-    if (opts.read !== false) {
-        getStream = getStream.pipe(getContents(opts));
-    }
-
-    var resultingStream = getStream.pipe(through.obj());
 
     if (cb) {
-        resultingStream.on('data', cb);
+        outputStream.on('data', cb);
     }
 
-    gaze.on('error', resultingStream.emit.bind(resultingStream, 'error'));
-    gaze.on('ready', resultingStream.emit.bind(resultingStream, 'ready'));
-    gaze.on('end', resultingStream.emit.bind(resultingStream, 'end'));
+    gaze.on('error', outputStream.emit.bind(outputStream, 'error'));
+    gaze.on('ready', outputStream.emit.bind(outputStream, 'ready'));
+    gaze.on('end', outputStream.emit.bind(outputStream, 'end'));
 
-    resultingStream.close = function () { gaze.close(); };
+    outputStream.close = function () { gaze.close(); };
 
     function log(event, file) {
         var msg = [util.colors.magenta(file.relative), 'was', event];
@@ -84,5 +79,5 @@ module.exports = function (globs, opts, cb) {
         util.log.apply(util, msg);
     }
 
-    return resultingStream;
+    return outputStream;
 };

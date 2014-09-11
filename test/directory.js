@@ -16,7 +16,7 @@ describe.skip('directories', function () {
     });
 
     // This test is not responding on directories creation
-    it('should directory on creation', function (done) {
+    it('should emit event on directory creation', function (done) {
         var w = watch(fixtures('**'));
         w.on('ready', function () {
             fs.mkdirSync(fixtures('test'));

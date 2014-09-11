@@ -3,6 +3,7 @@
 var watch = require('..');
 var join = require('path').join;
 var touch = require('./touch.js');
+var fs = require('fs');
 var rimraf = require('rimraf');
 require('should');
 
@@ -14,7 +15,10 @@ describe('stream', function () {
     var w;
 
     afterEach(function (done) {
-        w.on('end', done);
+        w.on('end', function () {
+            rimraf.sync(fixtures('new.js'));
+            done();
+        });
         w.close();
     });
 
@@ -27,12 +31,8 @@ describe('stream', function () {
         w = watch('test/fixtures/*.js');
         w.on('ready', touch(fixtures('new.js')));
         w.on('data', function (file) {
-            try {
-                file.relative.should.eql('new.js');
-                file.event.should.eql('added');
-            } finally {
-                rimraf.sync(fixtures('new.js'));
-            }
+            file.relative.should.eql('new.js');
+            file.event.should.eql('added');
             done();
         });
     });
@@ -63,5 +63,19 @@ describe('stream', function () {
             file.should.have.property('stat');
             done();
         });
+    });
+
+    it('should emit deleted file with stats', function (done) {
+        touch(fixtures('created.js'), function () {
+            w = watch(fixtures('*.js'), { buffer: false });
+            w.on('ready', function () {
+                fs.unlinkSync(fixtures('created.js'));
+            });
+            w.on('data', function (file) {
+                file.should.have.property('event', 'deleted');
+                file.should.have.property('contents', null);
+                done();
+            });
+        })();
     });
 });
