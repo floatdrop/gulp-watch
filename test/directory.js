@@ -10,18 +10,20 @@ function fixtures(glob) {
     return join(__dirname, 'fixtures', glob);
 }
 
-describe.skip('directories', function () {
+describe('directories', function () {
     beforeEach(function () {
-        rimraf.sync(fixtures('test'));
+        rimraf.sync(fixtures('newDir'));
     });
 
-    // This test is not responding on directories creation
     it('should emit event on directory creation', function (done) {
-        var w = watch(fixtures('**'));
-        w.on('ready', function () {
-            fs.mkdirSync(fixtures('test'));
+        var w = watch(fixtures('**/*.js'));
+        w.once('ready', function () {
+            fs.mkdirSync(fixtures('newDir'));
         });
-        w.on('data', function () {
+        w.on('data', function (file) {
+            file.relative.should.eql('test/fixtures/newDir');
+            file.should.have.property('contents', null);
+            file.event.should.eql('added');
             w.on('end', done);
             w.close();
         });

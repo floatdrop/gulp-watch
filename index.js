@@ -7,7 +7,12 @@ var util = require('gulp-util'),
     vinyl = require('vinyl-file'),
     File = require('vinyl'),
     glob2base = require('glob2base'),
-    path2glob = require('path2glob');
+    path2glob = require('path2glob'),
+    sep = require('path').sep;
+
+function isDirectory(path) {
+    return path[path.length - 1] === sep;
+}
 
 module.exports = function (globs, opts, cb) {
     if (!globs) throw new PluginError('gulp-watch', 'glob argument required');
@@ -56,7 +61,7 @@ module.exports = function (globs, opts, cb) {
 
         if (!baseForced) opts.base = glob ? glob2base(glob) : undefined;
 
-        if (event === 'deleted') {
+        if (event === 'deleted' || isDirectory(filepath)) {
             return write(event, null, new File(opts));
         }
 
