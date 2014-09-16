@@ -45,16 +45,17 @@ More examples can be found in [`docs/readme.md`](/docs/readme.md).
 
 ### watch(glob, [options, callback])
 
-Creates watcher that will spy on files that were matched by `glob` which can be a [`node-glob`](https://github.com/isaacs/node-glob) string or array of strings.
+Creates watcher that will spy on files that were matched by `glob` which can be a
+[`node-glob`](https://github.com/isaacs/node-glob) string or array of strings.
 
-This function has two behaviors modes based on presence of `callback` argument:
-
-1. `undefined` — stream of [vinyl](https://github.com/wearefractal/vinyl) objects with additional `event` property.
-2. `Function` — callback with batched events (see below).
+Returns pass through stream, that will emit vinyl files
+(with additional `event` property) that corresponds to event on file-system.
 
 #### Callback `function(events, done)`
 
-Events are grouped with [`gulp-batch`](https://github.com/floatdrop/gulp-batch).
+This function is called, when some group of events (that grouped with
+[`gulp-batch`](https://github.com/floatdrop/gulp-batch)) is happens on file-system.
+All incoming files that piped in will be grouped and passed to `events` stream as is.
 
  * `events` — is `Stream` of incoming events. Events will be grouped by timeout to prevent multiple tasks to be executed repeatedly by commands like `git pull`.
  * `done` — is callback for your function signal to batch once you are done. This allows you to run your callback as soon as the previous `end`.
