@@ -25,8 +25,23 @@ describe('callback', function () {
                     file.relative.should.eql('index.js');
                     file.event.should.eql('changed');
                 }))
-                .on('end', done);
+                .pipe(assert.end(done));
         });
+        w.on('ready', touch(fixtures('index.js')));
+    });
+
+    it('should be called after some data is piped in', function (done) {
+        w = watch(fixtures('*.js'), function (files) {
+            files
+                .on('data', function (file) {
+                    console.log(file);
+                    if (file === 1) { return; }
+                    file.relative.should.eql('index.js');
+                    file.event.should.eql('changed');
+                    done();
+                });
+        });
+        w.end(1);
         w.on('ready', touch(fixtures('index.js')));
     });
 });

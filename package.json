@@ -31,7 +31,7 @@
     "rimraf": "^2.2.8",
     "should": "~4.0.4",
     "sinon": "^1.9.1",
-    "stream-assert": "^1.0.1",
+    "stream-assert": "^2.0.1",
     "strip-ansi": "^2.0.0",
     "touch": "0.0.3"
   },
@@ -41,7 +41,7 @@
     "gulp-batch": "~0.4",
     "gulp-util": "~3.0.0",
     "path2glob": "0.0.2",
-    "through2": "^0.6.1",
+    "readable-stream": "^1.0.31",
     "vinyl": "^0.4.3",
     "vinyl-file": "~1.1.0"
   },

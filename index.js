@@ -2,7 +2,7 @@
 
 var util = require('gulp-util'),
     PluginError = require('gulp-util').PluginError,
-    through = require('through2'),
+    Duplex = require('readable-stream').Duplex,
     batch = require('gulp-batch'),
     vinyl = require('vinyl-file'),
     File = require('vinyl'),
@@ -32,11 +32,19 @@ module.exports = function (globs, opts, cb) {
 
     var baseForced = !!opts.base;
 
-    var outputStream = through.obj();
-
     if (cb) {
         cb = batch(opts, cb);
+    } else {
+        cb = function () { };
     }
+
+    var outputStream = new Duplex({ objectMode: true, allowHalfOpen: true });
+    outputStream._write = function _write(file, enc, done) {
+        cb(file);
+        outputStream.push(file);
+        done();
+    };
+    outputStream._read = function _read() { };
 
     var Gaze = require('gaze');
     var gaze = new Gaze(globs, opts);
@@ -47,7 +55,8 @@ module.exports = function (globs, opts, cb) {
         if (err) { return outputStream.emit('error', err); }
         log(event, file);
         file.event = event;
-        outputStream.write(file);
+        outputStream.push(file);
+        cb(file);
     }
 
     function processEvent(event, filepath) {
@@ -66,10 +75,6 @@ module.exports = function (globs, opts, cb) {
         }
 
         vinyl.read(filepath, opts, write.bind(null, event));
-    }
-
-    if (cb) {
-        outputStream.on('data', cb);
     }
 
     gaze.on('error', outputStream.emit.bind(outputStream, 'error'));
