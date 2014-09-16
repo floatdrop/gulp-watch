@@ -3,6 +3,7 @@
  * [Prevent pipe breaking on errors](#prevent-pipe-breaking-on-errors)
  * [Starting tasks on events](#starting-tasks-on-events)
  * [Filtering custom events](#filtering-custom-events)
+ * [Incremental build](#incremental-build)
 
 ### Prevent pipe breaking on errors
 
@@ -68,3 +69,30 @@ gulp.task('default', function () {
 ```
 
 **Notice:** `event` property is not added to files that were emitted by `emitOnGlob` and `emit: 'all'` options, only to files that actually caused the event.
+
+### Incremental build
+
+One of the nice features, that can be achieved with `gulp-watch` - is incremental build.
+When you want to build all files at start and then get only changed files - you can use these snippets:
+
+In callback style:
+
+```js
+gulp.task('default', function() {
+    return gulp.src('js/*.js').pipe(watch('js/*.js', function(files) {
+        return files.pipe(gulp.dest('.'));
+    }));
+});
+```
+
+Or in plain stream:
+
+```js
+gulp.task('default', function() {
+    return gulp.src('js/*.js')
+        .pipe(watch('js/*.js'))
+        .pipe(gulp.dest('.'));
+});
+```
+
+Since `gulp-watch` returns `passThrough` stream - it will reemit all incoming files in callback and in recieving stream.
