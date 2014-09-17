@@ -20,20 +20,12 @@ var gulp = require('gulp'),
     watch = require('gulp-watch');
 
 gulp.task('default', function () {
-    watch('css/**/*.css', function(files) {
-        return files.pipe(gulp.dest('./dist/'));
-    }));
-});
-```
-
-Or as continious stream:
-
-```js
-var gulp = require('gulp'),
-    watch = require('gulp-watch');
-
-gulp.task('default', function () {
-    watch('css/**/*.css').pipe(gulp.dest('./dist/'));
+    gulp.src('css/**/*.css')
+        .pipe(watch('css/**/*.css', function(files) {
+            return files.pipe(gulp.dest('./one/'));
+        }))
+        .pipe(gulp.dest('./two/'));
+    // `one` and `two` will contain same files
 });
 ```
 
