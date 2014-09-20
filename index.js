@@ -31,19 +31,22 @@ module.exports = function (globs, opts, cb) {
     if (!opts) opts = {};
 
     var baseForced = !!opts.base;
+    var outputStream = new Duplex({ objectMode: true, allowHalfOpen: true });
 
     if (cb) {
-        cb = batch(opts, cb);
+        cb = batch(opts, cb, function (err) {
+            outputStream.emit('error', err);
+        });
     } else {
         cb = function () { };
     }
 
-    var outputStream = new Duplex({ objectMode: true, allowHalfOpen: true });
     outputStream._write = function _write(file, enc, done) {
         cb(file);
         outputStream.push(file);
         done();
     };
+
     outputStream._read = function _read() { };
 
     var Gaze = require('gaze');
