@@ -34,7 +34,6 @@ describe('callback', function () {
         w = watch(fixtures('*.js'), function (files) {
             files
                 .on('data', function (file) {
-                    console.log(file);
                     if (file === 1) { return; }
                     file.relative.should.eql('index.js');
                     file.event.should.eql('changed');
