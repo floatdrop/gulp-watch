@@ -38,7 +38,7 @@
   "dependencies": {
     "gaze": "0.5.x",
     "glob2base": "~0.0.11",
-    "gulp-batch": "~0.4",
+    "gulp-batch": "~1",
     "gulp-util": "~3.0.0",
     "path2glob": "0.0.2",
     "readable-stream": "^1.0.31",
