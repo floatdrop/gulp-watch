@@ -95,4 +95,4 @@ gulp.task('default', function() {
 });
 ```
 
-Since `gulp-watch` returns `passThrough` stream - it will reemit all incoming files in callback and in recieving stream.
+Since `gulp-watch` returns `passThrough` stream - it will reemit all incoming files in callback and in receiving stream.
