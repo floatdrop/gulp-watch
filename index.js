@@ -1,5 +1,7 @@
 'use strict';
 
+function nop() {}
+
 var util = require('gulp-util'),
     PluginError = require('gulp-util').PluginError,
     Duplex = require('readable-stream').Duplex,
@@ -33,13 +35,7 @@ module.exports = function (globs, opts, cb) {
     var baseForced = !!opts.base;
     var outputStream = new Duplex({ objectMode: true, allowHalfOpen: true });
 
-    if (cb) {
-        cb = batch(opts, cb, function (err) {
-            outputStream.emit('error', err);
-        });
-    } else {
-        cb = function () { };
-    }
+    cb = cb ? batch(opts, cb, outputStream.emit.bind(outputStream, 'error')) : nop;
 
     outputStream._write = function _write(file, enc, done) {
         cb(file);
