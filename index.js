@@ -19,6 +19,8 @@ function isDirectory(path) {
 module.exports = function (globs, opts, cb) {
     if (!globs) throw new PluginError('gulp-watch', 'glob argument required');
 
+    if (globs.glob) globs = globs.glob;
+
     if (typeof globs === 'string') globs = [ globs ];
 
     if (!Array.isArray(globs)) {
