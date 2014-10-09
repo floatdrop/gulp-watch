@@ -82,6 +82,8 @@ Returned `Stream` from constructor have some useful methods:
 
  * `close()` — calling `gaze.close` and emitting `end`, after `gaze.close` is done.
 
+Also it has `_gaze` property to access Gaze instance.
+
 ### Events
 
  * `end` — all files are stop being watched.

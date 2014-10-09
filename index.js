@@ -46,7 +46,7 @@ module.exports = function (globs, opts, cb) {
     outputStream._read = function _read() { };
 
     var Gaze = require('gaze');
-    var gaze = new Gaze(globs, opts);
+    var gaze = outputStream._gaze = new Gaze(globs, opts);
 
     gaze.on('all', processEvent);
 
