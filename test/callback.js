@@ -20,7 +20,7 @@ describe('callback', function () {
 
     it('should be called on event', function (done) {
         w = watch(fixtures('*.js'), function (files) {
-            files
+            return files
                 .pipe(assert.first(function (file) {
                     file.relative.should.eql('index.js');
                     file.event.should.eql('changed');
@@ -32,7 +32,7 @@ describe('callback', function () {
 
     it('should be called after some data is piped in', function (done) {
         w = watch(fixtures('*.js'), function (files) {
-            files
+            return files
                 .on('data', function (file) {
                     if (file === 1) { return; }
                     file.relative.should.eql('index.js');
