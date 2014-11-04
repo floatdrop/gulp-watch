@@ -50,7 +50,7 @@ This function is called, when some group of events (that grouped with
 All incoming files that piped in will be grouped and passed to `events` stream as is.
 
  * `events` — is `Stream` of incoming events. Events will be grouped by timeout to prevent multiple tasks to be executed repeatedly by commands like `git pull`.
- * `done` — is callback for your function signal to batch once you are done. This allows you to run your callback as soon as the previous `end`.
+ * `done` — is callback for your function signal to batch once you are done. This allows you to run your callback as soon as the previous `end`. `done` can be omitter iff callback returning `Stream` or `Promise`, otherwise __it will block__ next events.
 
 #### Options
 
