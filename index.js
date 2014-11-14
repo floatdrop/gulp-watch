@@ -52,7 +52,7 @@ module.exports = function (globs, opts, cb) {
 
     function write(event, err, file) {
         if (err) { return outputStream.emit('error', err); }
-        log(event, file);
+        if (opts.verbose !== false) { log(event, file); }
         file.event = event;
         outputStream.push(file);
         cb(file);

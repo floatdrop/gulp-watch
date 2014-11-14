@@ -71,10 +71,10 @@ Name of the watcher. If it present in options, you will get more readable output
 ![Naming watchers](https://github.com/floatdrop/gulp-watch/raw/master/img/naming.png)
 
 #### options.verbose
-Type: `Boolean`  
-Default: `false`
+Type: `Boolean` / `undefined`  
+Default: `undefined`
 
-This options will enable more verbose output (useful for debugging).
+This options will enable more verbose output (on `true`) or disable it completly (on `false`).
 
 ### Methods
 
