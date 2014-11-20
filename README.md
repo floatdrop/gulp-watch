@@ -90,6 +90,12 @@ Also it has `_gaze` property to access Gaze instance.
  * `ready` — just re-emitted event from `gaze`.
  * `error` — when something happened inside callback, you will get notified.
 
+### 2.0.0 Changes
+
+Before `2.0.0` version there was a bug in `gulp-batch` - it does not prevent tasks to execute in same time. In `2.0.0` version of `gulp-batch` was bumped.
+
+This can cause your watch tasks to hang, if you do not calling `done` in callback or returning `Stream`/`Promise` from it.
+
 ### Migration to 1.0.0
 
  * __watch is not emmiting files at start__ - read «[Starting tasks on events](/docs/readme.md#starting-tasks-on-events)» and «[Incremental build](https://github.com/floatdrop/gulp-watch/tree/master/docs#incremental-build)» for workarounds.
