@@ -1,6 +1,6 @@
 {
   "name": "gulp-watch",
-  "version": "1.0.8",
+  "version": "1.1.1",
   "description": "Watch, that actually is an endless stream",
   "main": "index.js",
   "keywords": [
