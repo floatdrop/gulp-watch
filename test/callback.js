@@ -1,6 +1,5 @@
 /* global describe, it, afterEach */
 
-var assert = require('stream-assert');
 var watch = require('..');
 var join = require('path').join;
 var touch = require('./touch.js');
@@ -19,28 +18,11 @@ describe('callback', function () {
     });
 
     it('should be called on event', function (done) {
-        w = watch(fixtures('*.js'), function (files) {
-            return files
-                .pipe(assert.first(function (file) {
-                    file.relative.should.eql('index.js');
-                    file.event.should.eql('changed');
-                }))
-                .pipe(assert.end(done));
+        w = watch(fixtures('*.js'), function (file) {
+            file.relative.should.eql('index.js');
+            file.event.should.eql('changed');
+            done();
         });
-        w.on('ready', touch(fixtures('index.js')));
-    });
-
-    it('should be called after some data is piped in', function (done) {
-        w = watch(fixtures('*.js'), function (files) {
-            return files
-                .on('data', function (file) {
-                    if (file === 1) { return; }
-                    file.relative.should.eql('index.js');
-                    file.event.should.eql('changed');
-                    done();
-                });
-        });
-        w.end(1);
         w.on('ready', touch(fixtures('index.js')));
     });
 });

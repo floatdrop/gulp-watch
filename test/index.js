@@ -24,17 +24,4 @@ describe('watch', function () {
         });
         stream.write(1);
     });
-
-    it('should emit error, when callback is failed', function (done) {
-        var stream = watch(fixtures('*.js'), function () {
-            throw new Error('Bang!');
-        });
-        stream.on('error', function (err) {
-            err.message.should.eql('Bang!');
-            stream.on('end', done);
-            stream.close();
-        });
-        stream.write(1);
-    });
-
 });

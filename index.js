@@ -5,7 +5,6 @@ function nop() {}
 var util = require('gulp-util'),
     PluginError = require('gulp-util').PluginError,
     Duplex = require('readable-stream').Duplex,
-    batch = require('gulp-batch'),
     vinyl = require('vinyl-file'),
     File = require('vinyl'),
     glob2base = require('glob2base'),
@@ -35,7 +34,7 @@ module.exports = function (globs, opts, cb) {
     var baseForced = !!opts.base;
     var outputStream = new Duplex({ objectMode: true, allowHalfOpen: true });
 
-    cb = cb ? batch(opts, cb, outputStream.emit.bind(outputStream, 'error')) : nop;
+    cb = cb || nop;
 
     outputStream._write = function _write(file, enc, done) {
         cb(file);

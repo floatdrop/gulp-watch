@@ -21,11 +21,8 @@ var gulp = require('gulp'),
 
 gulp.task('default', function () {
     gulp.src('css/**/*.css')
-        .pipe(watch('css/**/*.css', function(files) {
-            return files.pipe(gulp.dest('./one/'));
-        }))
-        .pipe(gulp.dest('./two/'));
-    // `one` and `two` will contain same files
+        .pipe(watch('css/**/*.css'))
+        .pipe(gulp.dest('./build/'));
 });
 ```
 
@@ -43,18 +40,16 @@ Creates watcher that will spy on files that were matched by `glob` which can be 
 Returns pass through stream, that will emit vinyl files
 (with additional `event` property) that corresponds to event on file-system.
 
-#### Callback `function(events, done)`
+#### Callback `function(vinly)`
 
-This function is called, when some group of events (that grouped with
-[`gulp-batch`](https://github.com/floatdrop/gulp-batch)) is happens on file-system.
+This function is called, when some events is happens on file-system.
 All incoming files that piped in will be grouped and passed to `events` stream as is.
 
- * `events` — is `Stream` of incoming events. Events will be grouped by timeout to prevent multiple tasks to be executed repeatedly by commands like `git pull`.
- * `done` — is callback for your function signal to batch once you are done. This allows you to run your callback as soon as the previous `end`. `done` can be omitter iff callback returning `Stream` or `Promise`, otherwise __it will block__ next events.
+ * `vinyl` — is [vinyl](https://github.com/wearefractal/vinyl) object that corresponds to file that caused event. Additional `event` field is added to determine, what caused changes.
 
 #### Options
 
-This object is passed to [`gaze` options](https://github.com/shama/gaze#properties) directly (refer to [`gaze` documentation](https://github.com/shama/gaze)). For __batched__ mode, we are using [`gulp-batch`](https://github.com/floatdrop/gulp-batch#api), so options from there are also available. And of course options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are used too. If you do not want content from `watch`, then add `read: false` to the `options` object.
+This object is passed to [`gaze` options](https://github.com/shama/gaze#properties) directly (refer to [`gaze` documentation](https://github.com/shama/gaze)). Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are used. If you do not want content from `watch`, then add `read: false` to the `options` object.
 
 #### options.base
 Type: `String`  
@@ -89,6 +84,10 @@ Also it has `_gaze` property to access Gaze instance.
  * `end` — all files are stop being watched.
  * `ready` — just re-emitted event from `gaze`.
  * `error` — when something happened inside callback, you will get notified.
+
+### 3.0.0 Changes
+
+[gulp-batch](https://github.com/floatdrop/gulp-batch) was removed, so `callback` is changed. Now it passes just [vinyl](https://github.com/wearefractal/vinyl) object to you. Also `callback` now not catching errors inside and reemits them to stream.
 
 ### 2.0.0 Changes
 
