@@ -40,7 +40,7 @@ Creates watcher that will spy on files that were matched by `glob` which can be 
 Returns pass through stream, that will emit vinyl files
 (with additional `event` property) that corresponds to event on file-system.
 
-#### Callback `function(vinly)`
+#### Callback `function(vinyl)`
 
 This function is called, when some events is happens on file-system.
 All incoming files that piped in will be grouped and passed to `events` stream as is.
