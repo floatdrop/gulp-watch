@@ -61,9 +61,7 @@ Use explicit base path for files from `glob`.
 Type: `String`  
 Default: `undefined`
 
-Name of the watcher. If it present in options, you will get more readable output:
-
-![Naming watchers](https://github.com/floatdrop/gulp-watch/raw/master/img/naming.png)
+Name of the watcher. If it present in options, you will get more readable output.
 
 #### options.verbose
 Type: `Boolean` / `undefined`  
