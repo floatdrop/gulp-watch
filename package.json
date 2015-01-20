@@ -13,6 +13,9 @@
     "coverage": "istanbul cover node_modules/.bin/_mocha --report html -- -R spec",
     "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
+  "files": [
+    "index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/floatdrop/gulp-watch.git"
@@ -36,10 +39,11 @@
     "touch": "0.0.3"
   },
   "dependencies": {
-    "gaze": "0.5.x",
+    "anymatch": "^1.1.0",
+    "chokidar": "https://github.com/paulmillr/chokidar/tarball/bb1ceee4044aa6a0e275adbb12ebc08fc28ac784",
+    "glob": "^4.3.5",
     "glob2base": "~0.0.11",
     "gulp-util": "~3.0.0",
-    "path2glob": "0.0.2",
     "readable-stream": "^1.0.31",
     "vinyl": "^0.4.3",
     "vinyl-file": "~1.1.0"

@@ -49,7 +49,7 @@ All incoming files that piped in will be grouped and passed to `events` stream a
 
 #### Options
 
-This object is passed to [`gaze` options](https://github.com/shama/gaze#properties) directly (refer to [`gaze` documentation](https://github.com/shama/gaze)). Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are used. If you do not want content from `watch`, then add `read: false` to the `options` object.
+This object is passed to [`chokidar` options](https://github.com/paulmillr/chokidar#api) directly. Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are also available. If you do not want content from `watch`, then add `read: false` to the `options` object.
 
 #### options.base
 Type: `String`  
@@ -73,33 +73,19 @@ This options will enable more verbose output (on `true`) or disable it completly
 
 Returned `Stream` from constructor have some useful methods:
 
- * `close()` — calling `gaze.close` and emitting `end`, after `gaze.close` is done.
-
-Also it has `_gaze` property to access Gaze instance.
+ * `add(path / paths)`
+ * `unwatch(path / paths)`
+ * `close()`
 
 ### Events
 
- * `end` — all files are stop being watched.
- * `ready` — just re-emitted event from `gaze`.
- * `error` — when something happened inside callback, you will get notified.
+ * `end`
+ * `ready`
+ * `error`
 
-### 3.0.0 Changes
+### [Changelog](https://github.com/floatdrop/gulp-watch/releases)
 
-[gulp-batch](https://github.com/floatdrop/gulp-batch) was removed, so `callback` is changed. Now it passes just [vinyl](https://github.com/wearefractal/vinyl) object to you. Also `callback` now not catching errors inside and reemits them to stream.
-
-### 2.0.0 Changes
-
-Before `2.0.0` version there was a bug in `gulp-batch` - it does not prevent tasks to execute in same time. In `2.0.0` version of `gulp-batch` was bumped.
-
-This can cause your watch tasks to hang, if you do not calling `done` in callback or returning `Stream`/`Promise` from it.
-
-### Migration to 1.0.0
-
- * __watch is not emmiting files at start__ - read «[Starting tasks on events](/docs/readme.md#starting-tasks-on-events)» and «[Incremental build](https://github.com/floatdrop/gulp-watch/tree/master/docs#incremental-build)» for workarounds.
- * __watch is now pass through stream__ - which means that streaming files into watch will not add them to gaze. It is very hard to maintain, because watch is not aware about `glob`, from which this files come from and can not re-create vinyl object properly without maintaining cache of the `base` properties of incoming files (yuck).
- * __array of tasks is not accepted as callback__ - this was not working anyway, but rationale behind it - requiring gulp and calling internal method start is bad. This feature will become more clear, when gulp 4.0.0 will be released with new task system. Read «[Starting tasks on events](/docs/readme.md#starting-tasks-on-events)» for right way to do it.
-
-# License
+## License
 
 MIT (c) 2014 Vsevolod Strukchinsky (floatdrop@gmail.com)
 

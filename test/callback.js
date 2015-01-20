@@ -17,12 +17,24 @@ describe('callback', function () {
         w.close();
     });
 
-    it('should be called on event', function (done) {
+    it('should be called on add event', function (done) {
         w = watch(fixtures('*.js'), function (file) {
             file.relative.should.eql('index.js');
-            file.event.should.eql('changed');
+            file.event.should.eql('add');
             done();
         });
-        w.on('ready', touch(fixtures('index.js')));
+    });
+
+    it('should be called on add event', function (done) {
+        w = watch(fixtures('*.js'), function (file) {
+            if (file.event === 'add') {
+                touch(fixtures('index.js'))();
+            }
+
+            if (file.event === 'change') {
+                file.relative.should.eql('index.js');
+                done();
+            }
+        });
     });
 });
