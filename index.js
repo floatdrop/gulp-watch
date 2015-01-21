@@ -76,7 +76,7 @@ module.exports = function (globs, opts, cb) {
             return outputStream.emit('error', err);
         }
 
-        if (opts.verbose !== false) {
+        if (opts.verbose) {
             log(event, file);
         }
 
