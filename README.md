@@ -1,9 +1,6 @@
 # [gulp](https://github.com/gulpjs/gulp)-watch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
-> Watch, that actually is an endless stream
 
-###  
-
-This is an __reimplementation__ of bundled [`gulp.watch`](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatchglob—opts-cb) with an endless-stream approach. If `gulp.watch` is working for you, stick with it; otherwise, you can try this `gulp-watch` plugin.
+File watcher, that uses super-fast [chokidar](https://github.com/paulmillr/chokidar) and emits vinyl objects.
 
 ## Installation
 
