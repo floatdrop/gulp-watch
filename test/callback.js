@@ -2,6 +2,8 @@
 
 var watch = require('..');
 var join = require('path').join;
+var fs = require('fs');
+var rimraf = require('rimraf');
 var touch = require('./touch.js');
 require('should');
 
@@ -13,16 +15,41 @@ describe('callback', function () {
     var w;
 
     afterEach(function (done) {
+        rimraf.sync(fixtures('newDir'));
         w.on('end', done);
         w.close();
     });
 
-    it('should be called on event', function (done) {
+    it('should be called on add event', function (done) {
         w = watch(fixtures('*.js'), function (file) {
             file.relative.should.eql('index.js');
-            file.event.should.eql('changed');
+            file.event.should.eql('add');
             done();
         });
-        w.on('ready', touch(fixtures('index.js')));
+    });
+
+    it('should be called on add event', function (done) {
+        w = watch(fixtures('*.js'), function (file) {
+            if (file.event === 'add') {
+                touch(fixtures('index.js'))();
+            }
+
+            if (file.event === 'change') {
+                file.relative.should.eql('index.js');
+                done();
+            }
+        });
+    });
+
+    it('should be called on add event in new directory', function (done) {
+        rimraf.sync(fixtures('newDir'));
+
+        w = watch(fixtures('**/*.ts'), function (file) {
+            file.relative.should.eql('newDir/index.ts');
+            done();
+        }).on('ready', function () {
+            fs.mkdirSync(fixtures('newDir'));
+            touch(fixtures('newDir/index.ts'))();
+        });
     });
 });

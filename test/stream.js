@@ -29,52 +29,62 @@ describe('stream', function () {
 
     it('should emit added file', function (done) {
         w = watch('test/fixtures/*.js');
-        w.on('ready', touch(fixtures('new.js')));
         w.on('data', function (file) {
-            file.relative.should.eql('new.js');
-            file.event.should.eql('added');
+            file.relative.should.eql('index.js');
+            file.event.should.eql('add');
             done();
         });
     });
 
-    it('should emit changed file', function (done) {
+    it('should emit change event on file change', function (done) {
         w = watch(fixtures('*.js'));
         w.on('ready', touch(fixtures('index.js')));
         w.on('data', function (file) {
-            file.relative.should.eql('index.js');
-            file.event.should.eql('changed');
-            done();
+            if (file.event === 'change') {
+                file.relative.should.eql('index.js');
+                done();
+            }
         });
     });
 
     it('should emit changed file with stream contents', function (done) {
         w = watch(fixtures('*.js'), { buffer: false });
-        w.on('ready', touch(fixtures('index.js')));
         w.on('data', function (file) {
-            file.contents.should.have.property('readable', true);
-            done();
+            if (file.event === 'add') {
+                touch(fixtures('index.js'))();
+            }
+            if (file.event === 'change') {
+                file.contents.should.have.property('readable', true);
+                done();
+            }
         });
     });
 
     it('should emit changed file with stats', function (done) {
         w = watch(fixtures('*.js'), { buffer: false });
-        w.on('ready', touch(fixtures('index.js')));
         w.on('data', function (file) {
-            file.should.have.property('stat');
-            done();
+            if (file.event === 'add') {
+                touch(fixtures('index.js'))();
+            }
+            if (file.event === 'change') {
+                file.should.have.property('stat');
+                done();
+            }
         });
     });
 
     it('should emit deleted file with stats', function (done) {
         touch(fixtures('created.js'), function () {
             w = watch(fixtures('*.js'), { buffer: false });
-            w.on('ready', function () {
-                fs.unlinkSync(fixtures('created.js'));
-            });
             w.on('data', function (file) {
-                file.should.have.property('event', 'deleted');
-                file.should.have.property('contents', null);
-                done();
+                if (file.event === 'add' && file.relative === 'created.js') {
+                    fs.unlinkSync(fixtures('created.js'));
+                }
+
+                if (file.event === 'unlink') {
+                    file.should.have.property('contents', null);
+                    done();
+                }
             });
         })();
     });

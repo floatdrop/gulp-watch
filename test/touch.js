@@ -9,9 +9,7 @@ module.exports = function touch(path, content, cb) {
     cb = cb || function () {};
 
     return function () {
-        setTimeout(function () {
-            fs.writeFileSync(path, content || 'wadap');
-            cb();
-        }, 1000);
+        fs.writeFileSync(path, content || 'wadap');
+        cb();
     };
 };

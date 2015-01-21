@@ -1,24 +1,18 @@
 'use strict';
-
-function nop() {}
-
 var util = require('gulp-util'),
     PluginError = require('gulp-util').PluginError,
+    chokidar = require('chokidar'),
     Duplex = require('readable-stream').Duplex,
     vinyl = require('vinyl-file'),
     File = require('vinyl'),
     glob2base = require('glob2base'),
-    path2glob = require('path2glob'),
-    sep = require('path').sep;
-
-function isDirectory(path) {
-    return path[path.length - 1] === sep;
-}
+    anymatch = require('anymatch'),
+    Glob = require('glob').Glob;
 
 module.exports = function (globs, opts, cb) {
     if (!globs) throw new PluginError('gulp-watch', 'glob argument required');
 
-    if (typeof globs === 'string') globs = [ globs ];
+    if (typeof globs === 'string') globs = [globs];
 
     if (!Array.isArray(globs)) {
         throw new PluginError('gulp-watch', 'glob should be String or Array, not ' + (typeof globs));
@@ -29,12 +23,13 @@ module.exports = function (globs, opts, cb) {
         opts = {};
     }
 
-    if (!opts) opts = {};
+    opts = opts || {};
+    cb = cb || function () {};
+
+    opts.events = ['add', 'change', 'unlink'];
 
     var baseForced = !!opts.base;
-    var outputStream = new Duplex({ objectMode: true, allowHalfOpen: true });
-
-    cb = cb || nop;
+    var outputStream = new Duplex({objectMode: true, allowHalfOpen: true});
 
     outputStream._write = function _write(file, enc, done) {
         cb(file);
@@ -44,46 +39,63 @@ module.exports = function (globs, opts, cb) {
 
     outputStream._read = function _read() { };
 
-    var Gaze = require('gaze');
-    var gaze = outputStream._gaze = new Gaze(globs, opts);
+    var watcher = chokidar.watch(globs, opts)
+        .on('all', processEvent)
+        .on('error', outputStream.emit.bind(outputStream, 'error'))
+        .on('ready', outputStream.emit.bind(outputStream, 'ready'));
 
-    gaze.on('all', processEvent);
-
-    function write(event, err, file) {
-        if (err) { return outputStream.emit('error', err); }
-        if (opts.verbose !== false) { log(event, file); }
-        file.event = event;
-        outputStream.push(file);
-        cb(file);
-    }
+    outputStream.add = watcher.add.bind(watcher);
+    outputStream.unwatch = watcher.unwatch.bind(watcher);
+    outputStream.close = function () {
+        watcher.close();
+        outputStream.emit('end');
+    };
 
     function processEvent(event, filepath) {
-        var glob = path2glob(filepath, globs, opts);
-
-        if (!glob && opts.verbose !== false) {
-            log('not matched by globs', { relative: filepath });
-        }
+        var glob = globs[anymatch(globs, filepath, true)];
 
         opts.path = filepath;
 
-        if (!baseForced) opts.base = glob ? glob2base(glob) : undefined;
+        if (!baseForced) {
+            opts.base = glob2base(new Glob(glob, opts));
+        }
 
-        if (event === 'deleted' || isDirectory(filepath)) {
+        // React only on opts.events
+        if (opts.events.indexOf(event) === -1) {
+            return;
+        }
+
+        // Do not stat deleted files
+        if (event === 'unlink') {
             return write(event, null, new File(opts));
         }
 
         vinyl.read(filepath, opts, write.bind(null, event));
     }
 
-    gaze.on('error', outputStream.emit.bind(outputStream, 'error'));
-    gaze.on('ready', outputStream.emit.bind(outputStream, 'ready'));
-    gaze.on('end', outputStream.emit.bind(outputStream, 'end'));
+    function write(event, err, file) {
+        if (err) {
+            return outputStream.emit('error', err);
+        }
 
-    outputStream.close = function () { gaze.close(); };
+        if (opts.verbose) {
+            log(event, file);
+        }
+
+        file.event = event;
+        outputStream.push(file);
+        cb(file);
+    }
 
     function log(event, file) {
+        event = event[event.length - 1] === 'e' ? event + 'd' : event + 'ed';
+
         var msg = [util.colors.magenta(file.relative), 'was', event];
-        if (opts.name) { msg.unshift(util.colors.cyan(opts.name) + ' saw'); }
+
+        if (opts.name) {
+            msg.unshift(util.colors.cyan(opts.name) + ' saw');
+        }
+
         util.log.apply(util, msg);
     }
 
