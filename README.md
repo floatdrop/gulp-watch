@@ -5,10 +5,6 @@
 
 This is an __reimplementation__ of bundled [`gulp.watch`](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatchglob—opts-cb) with an endless-stream approach. If `gulp.watch` is working for you, stick with it; otherwise, you can try this `gulp-watch` plugin.
 
-The main reason for `gulp-watch`'s existence is that it can easily achieve per-file rebuilding on file change:
-
-![Awesome demonstration](https://github.com/floatdrop/gulp-watch/raw/master/img/2014-01-09.gif)
-
 ## Installation
 
 Run `npm install gulp-watch`.
