@@ -45,13 +45,19 @@ All incoming files that piped in will be grouped and passed to `events` stream a
 
 Possible events:
 
- * `add` - file was added to watched or created
+ * `add` - file was added to watch or created
  * `change` - file was changed
  * `unlink` - file was deleted
 
 #### Options
 
 This object is passed to [`chokidar` options](https://github.com/paulmillr/chokidar#api) directly. Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are also available. If you do not want content from `watch`, then add `read: false` to the `options` object.
+
+#### options.events
+Type: `Array`  
+Default: `['add', 'change', 'unlink']`
+
+List of events, that should be watched by gulp-watch. Contains [event names from chokidar](https://github.com/paulmillr/chokidar#events).
 
 #### options.base
 Type: `String`  

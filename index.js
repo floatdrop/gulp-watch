@@ -26,6 +26,8 @@ module.exports = function (globs, opts, cb) {
     opts = opts || {};
     cb = cb || function () {};
 
+    opts.events = ['add', 'change', 'unlink'];
+
     var baseForced = !!opts.base;
     var outputStream = new Duplex({objectMode: true, allowHalfOpen: true});
 
@@ -58,8 +60,8 @@ module.exports = function (globs, opts, cb) {
             opts.base = glob2base(new Glob(glob, opts));
         }
 
-        // Do not react on directories
-        if (event === 'addDir' || event === 'unlinkDir') {
+        // React only on opts.events
+        if (opts.events.indexOf(event) === -1) {
             return;
         }
 
