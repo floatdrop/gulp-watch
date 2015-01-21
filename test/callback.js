@@ -2,6 +2,8 @@
 
 var watch = require('..');
 var join = require('path').join;
+var fs = require('fs');
+var rimraf = require('rimraf');
 var touch = require('./touch.js');
 require('should');
 
@@ -13,6 +15,7 @@ describe('callback', function () {
     var w;
 
     afterEach(function (done) {
+        rimraf.sync(fixtures('newDir'));
         w.on('end', done);
         w.close();
     });
@@ -35,6 +38,18 @@ describe('callback', function () {
                 file.relative.should.eql('index.js');
                 done();
             }
+        });
+    });
+
+    it('should be called on add event in new directory', function (done) {
+        rimraf.sync(fixtures('newDir'));
+
+        w = watch(fixtures('**/*.ts'), function (file) {
+            file.relative.should.eql('newDir/index.ts');
+            done();
+        }).on('ready', function () {
+            fs.mkdirSync(fixtures('newDir'));
+            touch(fixtures('newDir/index.ts'))();
         });
     });
 });
