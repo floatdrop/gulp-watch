@@ -74,10 +74,7 @@ When you want to build all files at start and then get only changed files - you 
 
 ```js
 gulp.task('default', function () {
-    return gulp.src('js/*.js')
-        .pipe(watch('js/*.js'))
-        .pipe(gulp.dest('.'));
+    return watch('js/*.js')
+        .pipe(gulp.dest('./build'));
 });
 ```
-
-Since `gulp-watch` returns `passThrough` stream - it will reemit all incoming files in callback and in receiving stream.
