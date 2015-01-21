@@ -27,24 +27,21 @@ gulp.task('styles', function () {
 
 ### Starting tasks on events
 
-Often you want just to launch some tasks (like `build`) when something happened to watched files.
+Often you want just to launch some tasks (like `build`) when something happened to watched files. You can pass plain callback, that will be called on every event or wrap it in `gulp-batch` to run it once:
 
 ```js
 var gulp = require('gulp');
 var watch = require('gulp-watch');
+var batch = require('gulp-batch');
 
 gulp.task('build', function () { console.log('Working!'); });
 
 gulp.task('watch', function () {
-    watch('**/*.js', function () {
+    watch('**/*.js', batch(function () {
         gulp.start('build');
-    });
+    }));
 });
 ```
-
-> __Why should I use that, instead of shorter `gulp.watch('**/*.js', [build]);` ?__
-
-Since `gulp-watch` is using `gulp-batch` for callback — it will not start another build while one is running. Instead it will buffer files, that triggered callback and run build again with all files. It often happens when you doing `git checkout` or `git reset` or have long `build` task.
 
 ### Filtering custom events
 
