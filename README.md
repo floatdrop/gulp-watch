@@ -72,7 +72,7 @@ Default: `undefined`
 Name of the watcher. If it present in options, you will get more readable output.
 
 #### options.verbose
-Type: `Boolean`
+Type: `Boolean`  
 Default: `false`
 
 This options will enable verbose output.
