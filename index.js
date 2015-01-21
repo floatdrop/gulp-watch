@@ -66,7 +66,7 @@ module.exports = function (globs, opts, cb) {
         }
 
         // Do not stat deleted files
-        if (event === 'unlink') {
+        if (event === 'unlink' || event === 'unlinkDir') {
             return write(event, null, new File(opts));
         }
 
