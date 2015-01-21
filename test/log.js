@@ -36,7 +36,7 @@ describe('log', function () {
         w = watch(fixtures('*.js'));
         w.once('data', function () {
             gutilStub.log.calledOnce.should.be.eql(true);
-            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('index.js was add');
+            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('index.js was added');
             done();
         });
     });
@@ -45,7 +45,7 @@ describe('log', function () {
         w = watch(fixtures('**/*.js'));
         w.on('data', function (file) {
             if (file.relative === 'folder/index.js') {
-                strip(gutilStub.log.secondCall.args.join(' ')).should.eql('folder/index.js was add');
+                strip(gutilStub.log.secondCall.args.join(' ')).should.eql('folder/index.js was added');
                 done();
             }
         });
@@ -56,7 +56,7 @@ describe('log', function () {
         w.on('ready', touch(fixtures('index.js')));
         w.once('data', function () {
             gutilStub.log.calledOnce.should.be.eql(true);
-            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('Watch saw index.js was add');
+            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('Watch saw index.js was added');
             done();
         });
     });

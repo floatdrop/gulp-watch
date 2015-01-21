@@ -86,6 +86,8 @@ module.exports = function (globs, opts, cb) {
     }
 
     function log(event, file) {
+        event = event[event.length - 1] === 'e' ? event + 'd' : event + 'ed';
+
         var msg = [util.colors.magenta(file.relative), 'was', event];
 
         if (opts.name) {
