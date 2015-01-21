@@ -47,6 +47,12 @@ All incoming files that piped in will be grouped and passed to `events` stream a
 
  * `vinyl` — is [vinyl](https://github.com/wearefractal/vinyl) object that corresponds to file that caused event. Additional `event` field is added to determine, what caused changes.
 
+Possible events:
+
+ * `add` - file was added to watched or created
+ * `change` - file was changed
+ * `unlink` - file was deleted
+
 #### Options
 
 This object is passed to [`chokidar` options](https://github.com/paulmillr/chokidar#api) directly. Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are also available. If you do not want content from `watch`, then add `read: false` to the `options` object.
