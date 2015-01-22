@@ -5,9 +5,8 @@ var util = require('gulp-util'),
     Duplex = require('readable-stream').Duplex,
     vinyl = require('vinyl-file'),
     File = require('vinyl'),
-    glob2base = require('glob2base'),
-    anymatch = require('anymatch'),
-    Glob = require('glob').Glob;
+    globParent = require('glob-parent'),
+    anymatch = require('anymatch');
 
 module.exports = function (globs, opts, cb) {
     if (!globs) throw new PluginError('gulp-watch', 'glob argument required');
@@ -57,7 +56,7 @@ module.exports = function (globs, opts, cb) {
         opts.path = filepath;
 
         if (!baseForced) {
-            opts.base = glob2base(new Glob(glob, opts));
+            opts.base = globParent(glob);
         }
 
         // React only on opts.events
