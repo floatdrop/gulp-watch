@@ -59,7 +59,7 @@ List of events, that should be watched by gulp-watch. Contains [event names from
 Type: `String`  
 Default: `undefined`
 
-Use explicit base path for files from `glob`.
+Use explicit base path for files from `glob`. Read more about `base` and `cwd` in [gulpjs docs](https://github.com/gulpjs/gulp/blob/master/docs/API.md#options).
 
 #### options.name
 Type: `String`  

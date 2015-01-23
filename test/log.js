@@ -36,29 +36,26 @@ describe('log', function () {
         w = watch(fixtures('*.js'), {verbose: true});
         w.once('data', function () {
             gutilStub.log.calledOnce.should.be.eql(true);
-            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('index.js was added');
+            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('index.js was changed');
             done();
-        });
+        }).on('ready', touch(fixtures('index.js')));
     });
 
     it('should print relative file name', function (done) {
         w = watch(fixtures('**/*.js'), {verbose: true});
-        w.on('data', function (file) {
-            if (file.relative === 'folder/index.js') {
-                strip(gutilStub.log.secondCall.args.join(' ')).should.eql('folder/index.js was added');
-                done();
-            }
-        });
+        w.once('data', function () {
+            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('folder/index.js was changed');
+            done();
+        }).on('ready', touch(fixtures('folder/index.js')));
     });
 
     it('should print custom watcher name', function (done) {
         w = watch(fixtures('*.js'), { name: 'Watch', verbose: true });
-        w.on('ready', touch(fixtures('index.js')));
         w.once('data', function () {
             gutilStub.log.calledOnce.should.be.eql(true);
-            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('Watch saw index.js was added');
+            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('Watch saw index.js was changed');
             done();
-        });
+        }).on('ready', touch(fixtures('index.js')));
     });
 
 });
