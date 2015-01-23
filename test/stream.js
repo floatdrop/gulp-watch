@@ -63,7 +63,7 @@ describe('stream', function () {
 
     it('should emit deleted file with stats', function (done) {
         touch(fixtures('created.js'), function () {
-            w = watch(fixtures('*.js'), { buffer: false });
+            w = watch(fixtures('**/*.js'), { buffer: false });
             w.on('data', function (file) {
                 file.should.have.property('contents', null);
                 done();
