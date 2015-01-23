@@ -37,7 +37,7 @@ Returns pass through stream, that will emit vinyl files
 This function is called, when some events is happens on file-system.
 All incoming files that piped in will be grouped and passed to `events` stream as is.
 
- * `vinyl` — is [vinyl](https://github.com/wearefractal/vinyl) object that corresponds to file that caused event. Additional `event` field is added to determine, what caused changes.
+ * `vinyl` — is [vinyl](https://github.com/wearefractal/vinyl) object that corresponds to file that caused event. Additional `event` field is added to determine what caused changes.
 
 Possible events:
 
