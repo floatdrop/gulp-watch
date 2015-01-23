@@ -25,7 +25,7 @@ module.exports = function (globs, opts, cb) {
     opts = opts || {};
     cb = cb || function () {};
 
-    opts.events = ['add', 'change', 'unlink'];
+    opts.events = opts.events || ['add', 'change', 'unlink'];
 
     var baseForced = !!opts.base;
     var outputStream = new Duplex({objectMode: true, allowHalfOpen: true});
