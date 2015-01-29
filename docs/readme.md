@@ -17,8 +17,9 @@ var watch = require('gulp-watch');
 var plumber = require('gulp-plumber');
 var sass = require('gulp-ruby-sass');
 
-gulp.task('styles', function () {  
-    watch('scss/*.scss')
+gulp.task('styles', function () {
+    return gulp.src('scss/*.scss')
+        .pipe(watch('scss/*.scss'))
         .pipe(plumber())
         .pipe(sass())
         .pipe(gulp.dest('dist/'));
@@ -45,19 +46,20 @@ gulp.task('watch', function () {
 
 ### Filtering custom events
 
-When you want to make actions only on specific events, you can use [`gulp-filter`](https://github.com/sindresorhus/gulp-filter) and the `event` attribute, which is added to all files that were `added`, `changed` or `deleted` (per [`gaze`'s documentation](https://github.com/shama/gaze#events)):
+When you want to make actions only on specific events, you can use [`gulp-filter`](https://github.com/sindresorhus/gulp-filter) and the `event` attribute, which is added to all files that were `add`, `change` or `unlink` (per [`chokidar`'s documentation](https://github.com/paulmillr/chokidar#events)):
 
 ```js
 var filter = require('gulp-filter');
 
 function isAdded(file) {
-    return file.event === 'added';
+    return file.event === 'add';
 }
 
 var filterAdded = filter(isAdded);
 
 gulp.task('default', function () {
-    watch('**/*.js')
+    return gulp.src('**/*.js')
+        .pipe(watch('**/*.js'))
         .pipe(filterAdded)
         .pipe(gulp.dest('newfiles'))
         .pipe(filterAdded.restore())
@@ -74,7 +76,8 @@ When you want to build all files at start and then get only changed files - you 
 
 ```js
 gulp.task('default', function () {
-    return watch('js/*.js')
+    return gulp.src('**/*.js')
+        .pipe(watch('**/*.js'))
         .pipe(gulp.dest('./build'));
 });
 ```
