@@ -50,6 +50,12 @@ Possible events:
 
 This object is passed to [`chokidar` options](https://github.com/paulmillr/chokidar#api) directly. Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are also available. If you do not want content from `watch`, then add `read: false` to the `options` object.
 
+#### options.[ignoreInitial](https://github.com/paulmillr/chokidar#path-filtering)
+Type: `Boolean`  
+Default: `true`
+
+> Indicates whether chokidar should ignore the initial add events or not.
+
 #### options.events
 Type: `Array`  
 Default: `['add', 'change', 'unlink']`
