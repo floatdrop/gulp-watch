@@ -43,6 +43,7 @@
     "chokidar": "^1.0.0-rc2",
     "glob-parent": "^1.0.0",
     "gulp-util": "~3.0.0",
+    "is-glob": "^1.1.0",
     "readable-stream": "^1.0.31",
     "vinyl": "^0.4.3",
     "vinyl-file": "~1.1.0"

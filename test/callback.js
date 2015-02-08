@@ -28,6 +28,14 @@ describe('callback', function () {
         }).on('ready', touch(fixtures('index.js')));
     });
 
+    it('should be called on non-glob pattern', function (done) {
+        w = watch(fixtures('index.js'), function (file) {
+            file.relative.should.eql('index.js');
+            file.event.should.eql('change');
+            done();
+        }).on('ready', touch(fixtures('index.js')));
+    });
+
     it('should be called on add event in new directory', function (done) {
         rimraf.sync(fixtures('newDir'));
 
