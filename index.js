@@ -1,12 +1,14 @@
 'use strict';
 var util = require('gulp-util'),
+    path = require('path'),
     PluginError = require('gulp-util').PluginError,
     chokidar = require('chokidar'),
     Duplex = require('readable-stream').Duplex,
     vinyl = require('vinyl-file'),
     File = require('vinyl'),
     globParent = require('glob-parent'),
-    anymatch = require('anymatch');
+    anymatch = require('anymatch'),
+    isGlob = require('is-glob');
 
 module.exports = function (globs, opts, cb) {
     if (!globs) throw new PluginError('gulp-watch', 'glob argument required');
@@ -57,7 +59,7 @@ module.exports = function (globs, opts, cb) {
         opts.path = filepath;
 
         if (!baseForced) {
-            opts.base = globParent(glob);
+            opts.base = isGlob(glob) ? globParent(glob) : path.dirname(glob);
         }
 
         // React only on opts.events
