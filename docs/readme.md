@@ -22,7 +22,7 @@ gulp.task('styles', function () {
         .pipe(watch('scss/*.scss'))
         .pipe(plumber())
         .pipe(sass())
-        .pipe(gulp.dest('dist/'));
+        .pipe(gulp.dest('dist'));
 });
 ```
 
@@ -78,6 +78,6 @@ When you want to build all files at start and then get only changed files - you 
 gulp.task('default', function () {
     return gulp.src('**/*.js')
         .pipe(watch('**/*.js'))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('build'));
 });
 ```

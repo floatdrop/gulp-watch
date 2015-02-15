@@ -15,7 +15,7 @@ var gulp = require('gulp'),
 gulp.task('default', function () {
     gulp.src('css/**/*.css')
         .pipe(watch('css/**/*.css'))
-        .pipe(gulp.dest('./build/'));
+        .pipe(gulp.dest('build'));
 });
 ```
 
@@ -28,7 +28,7 @@ More examples can be found in [`docs/readme.md`](/docs/readme.md).
 ### watch(glob, [options, callback])
 
 Creates watcher that will spy on files that were matched by `glob` which can be a
-[`node-glob`](https://github.com/isaacs/node-glob) string or array of strings.
+glob string or array of glob strings.
 
 Returns pass through stream, that will emit vinyl files
 (with additional `event` property) that corresponds to event on file-system.
