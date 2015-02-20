@@ -1,4 +1,4 @@
-# Recipies
+# Recipes
 
  * [Prevent pipe breaking on errors](#prevent-pipe-breaking-on-errors)
  * [Starting tasks on events](#starting-tasks-on-events)
@@ -9,7 +9,7 @@
 
 > Until gulp 4.0 is released this is actual information
 
-When you pipe one Stream to another and do not attaching `on('error')` handler they will `unpipe` on every error. This is frustraiting, when you have watcher and something like `coffeescript` builder. It is pretty easy to put typo in file and breake pipeline forever. To avoid this, you can use [`gulp-plumber`](https://github.com/floatdrop/gulp-plumber):
+When you pipe one Stream to another and do not attaching `on('error')` handler they will `unpipe` on every error. This is frustrating, when you have watcher and something like `coffeescript` builder. It is pretty easy to put typo in file and breake pipeline forever. To avoid this, you can use [`gulp-plumber`](https://github.com/floatdrop/gulp-plumber):
 
 ```js
 var gulp = require('gulp');
