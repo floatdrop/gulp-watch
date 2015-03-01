@@ -35,7 +35,7 @@ module.exports = function (globs, opts, cb) {
 
     outputStream._write = function _write(file, enc, done) {
         cb(file);
-        outputStream.push(file);
+        outputStream.emit('data', file);
         done();
     };
 
@@ -85,7 +85,7 @@ module.exports = function (globs, opts, cb) {
         }
 
         file.event = event;
-        outputStream.push(file);
+        outputStream.emit('data', file);
         cb(file);
     }
 
