@@ -12,10 +12,17 @@ Run `npm install gulp-watch`.
 var gulp = require('gulp'),
     watch = require('gulp-watch');
 
-gulp.task('default', function () {
+gulp.task('stream', function () {
     gulp.src('css/**/*.css')
         .pipe(watch('css/**/*.css'))
         .pipe(gulp.dest('build'));
+});
+
+gulp.task('callback', function () {
+    watch('css/**/*.css', function () {
+        gulp.src('css/**/*.css')
+            .pipe(watch('css/**/*.css'));
+    ));
 });
 ```
 
