@@ -87,6 +87,12 @@ Default: `false`
 
 This options will enable verbose output.
 
+#### options.readDelay
+Type: `Number`  
+Default: `10`
+
+Wait for `readDealy` milliseconds before read file.
+
 ### Methods
 
 Returned `Stream` from constructor have some useful methods:

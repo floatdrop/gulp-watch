@@ -29,6 +29,7 @@ module.exports = function (globs, opts, cb) {
 
     opts.events = opts.events || ['add', 'change', 'unlink'];
     if (opts.ignoreInitial === undefined) { opts.ignoreInitial = true; }
+    opts.readDelay = opts.readDelay || 10;
 
     var baseForced = !!opts.base;
     var outputStream = new Duplex({objectMode: true, allowHalfOpen: true});
@@ -72,7 +73,10 @@ module.exports = function (globs, opts, cb) {
             return write(event, null, new File(opts));
         }
 
-        vinyl.read(filepath, opts, write.bind(null, event));
+        // Workaround for early read
+        setTimeout(function () {
+            vinyl.read(filepath, opts, write.bind(null, event));
+        }, opts.readDelay);
     }
 
     function write(event, err, file) {
