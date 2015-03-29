@@ -1,14 +1,14 @@
 /* global describe, it, afterEach */
 
 var watch = require('..');
-var join = require('path').join;
+var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 var touch = require('./touch.js');
 require('should');
 
 function fixtures(glob) {
-    return join(__dirname, 'fixtures', glob);
+    return path.join(__dirname, 'fixtures', glob);
 }
 
 describe('callback', function () {
@@ -40,11 +40,35 @@ describe('callback', function () {
         rimraf.sync(fixtures('newDir'));
 
         w = watch(fixtures('**/*.ts'), function (file) {
-            file.relative.should.eql('newDir/index.ts');
+            file.relative.should.eql(path.normalize('newDir/index.ts'));
             done();
         }).on('ready', function () {
             fs.mkdirSync(fixtures('newDir'));
             touch(fixtures('newDir/index.ts'))();
         });
+    });
+
+    it('unlinked `file.path` should be absolute (absolute glob)', function (done) {
+        fs.mkdirSync(fixtures('newDir'));
+        touch(fixtures('newDir/index.ts'), function () {
+            w = watch(fixtures('**/*.ts'), { base: 'newDir/' }, function (file) {
+                file.path.should.eql(path.normalize(fixtures('newDir/index.ts')));
+                done();
+            }).on('ready', function () {
+                fs.unlinkSync(fixtures('newDir/index.ts'));
+            });
+        })();
+    });
+
+    it('unlinked `file.path` should be absolute (relative glob)', function (done) {
+        fs.mkdirSync(fixtures('newDir'));
+        touch(fixtures('newDir/index.ts'), function () {
+            w = watch('test/fixtures/**/*.ts', { base: 'newDir/' }, function (file) {
+                file.path.should.eql(path.normalize(fixtures('newDir/index.ts')));
+                done();
+            }).on('ready', function () {
+                fs.unlinkSync(fixtures('newDir/index.ts'));
+            });
+        })();
     });
 });
