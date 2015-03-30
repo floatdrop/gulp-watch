@@ -9,14 +9,14 @@ var proxyquire = require('proxyquire'),
     }),
     sinon = require('sinon');
 
-var join = require('path').join;
+var path = require('path');
 var touch = require('./touch.js');
 var strip = require('strip-ansi');
 
 require('should');
 
 function fixtures(glob) {
-    return join(__dirname, 'fixtures', glob);
+    return path.join(__dirname, 'fixtures', glob);
 }
 
 describe('log', function () {
@@ -44,7 +44,7 @@ describe('log', function () {
     it('should print relative file name', function (done) {
         w = watch(fixtures('**/*.js'), {verbose: true});
         w.once('data', function () {
-            strip(gutilStub.log.firstCall.args.join(' ')).should.eql('folder/index.js was changed');
+            strip(gutilStub.log.firstCall.args.join(' ')).should.eql(path.normalize('folder/index.js') + ' was changed');
             done();
         }).on('ready', touch(fixtures('folder/index.js')));
     });

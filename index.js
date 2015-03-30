@@ -8,7 +8,8 @@ var util = require('gulp-util'),
     File = require('vinyl'),
     globParent = require('glob-parent'),
     anymatch = require('anymatch'),
-    isGlob = require('is-glob');
+    isGlob = require('is-glob'),
+    pathIsAbsolute = require('path-is-absolute');
 
 module.exports = function (globs, opts, cb) {
     if (!globs) throw new PluginError('gulp-watch', 'glob argument required');
@@ -57,8 +58,6 @@ module.exports = function (globs, opts, cb) {
     function processEvent(event, filepath) {
         var glob = globs[anymatch(globs, filepath, true)];
 
-        opts.path = filepath;
-
         if (!baseForced) {
             opts.base = isGlob(glob) ? globParent(glob) : path.dirname(glob);
         }
@@ -70,6 +69,7 @@ module.exports = function (globs, opts, cb) {
 
         // Do not stat deleted files
         if (event === 'unlink' || event === 'unlinkDir') {
+            opts.path = pathIsAbsolute(filepath) ? filepath : path.join(opts.cwd || process.cwd(), filepath);
             return write(event, null, new File(opts));
         }
 
