@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "anymatch": "1.1.x",
-    "chokidar": "^1.0.0-rc2",
+    "chokidar": "1.0.0-rc5",
     "glob-parent": "^1.0.0",
     "gulp-util": "~3.0.0",
     "is-glob": "^1.1.0",
