@@ -1,6 +1,6 @@
 # [gulp](https://github.com/gulpjs/gulp)-watch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
 
-File watcher, that uses super-fast [chokidar](https://github.com/paulmillr/chokidar) and emits vinyl objects.
+File watcher that uses super-fast [chokidar](https://github.com/paulmillr/chokidar) and emits vinyl objects.
 
 ## Installation
 
@@ -34,18 +34,18 @@ More examples can be found in [`docs/readme.md`](/docs/readme.md).
 
 ### watch(glob, [options, callback])
 
-Creates watcher that will spy on files that were matched by `glob` which can be a
+Creates a watcher that will spy on files that are matched by `glob` which can be a
 glob string or array of glob strings.
 
-Returns pass through stream, that will emit vinyl files
+Returns a pass through stream that will emit vinyl files
 (with additional `event` property) that corresponds to event on file-system.
 
 #### Callback `function(vinyl)`
 
-This function is called, when some events is happens on file-system.
-All incoming files that piped in will be grouped and passed to `events` stream as is.
+This function is called when events happen on the file-system.
+All incoming files that are piped in are grouped and passed to the `events` stream as is.
 
- * `vinyl` — is [vinyl](https://github.com/wearefractal/vinyl) object that corresponds to file that caused event. Additional `event` field is added to determine what caused changes.
+ * `vinyl` — is [vinyl](https://github.com/wearefractal/vinyl) object that corresponds to the file that caused the event. Additional `event` field is added to determine what caused changes.
 
 Possible events:
 
@@ -55,7 +55,7 @@ Possible events:
 
 #### Options
 
-This object is passed to [`chokidar` options](https://github.com/paulmillr/chokidar#api) directly. Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are also available. If you do not want content from `watch`, then add `read: false` to the `options` object.
+This object is passed to the [`chokidar` options](https://github.com/paulmillr/chokidar#api) directly. Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are also available. If you do not want content from `watch`, then add `read: false` to the `options` object.
 
 #### options.[ignoreInitial](https://github.com/paulmillr/chokidar#path-filtering)
 Type: `Boolean`  
@@ -79,23 +79,23 @@ Use explicit base path for files from `glob`. Read more about `base` and `cwd` i
 Type: `String`  
 Default: `undefined`
 
-Name of the watcher. If it present in options, you will get more readable output.
+Name of the watcher. If it is present in options, you will get more readable output.
 
 #### options.verbose
 Type: `Boolean`  
 Default: `false`
 
-This options will enable verbose output.
+This option will enable verbose output.
 
 #### options.readDelay
 Type: `Number`  
 Default: `10`
 
-Wait for `readDealy` milliseconds before read file.
+Wait for `readDealy` milliseconds before reading the file.
 
 ### Methods
 
-Returned `Stream` from constructor have some useful methods:
+Returned `Stream` from constructor has some useful methods:
 
  * `add(path / paths)`
  * `unwatch(path / paths)`
