@@ -18,10 +18,11 @@ gulp.task('stream', function () {
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('callback', function () {
+gulp.task('callback', function (cb) {
     watch('css/**/*.css', function () {
         gulp.src('css/**/*.css')
-            .pipe(watch('css/**/*.css'));
+            .pipe(watch('css/**/*.css'))
+            .on('end', cb);
     ));
 });
 ```
