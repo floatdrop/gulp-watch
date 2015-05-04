@@ -23,7 +23,7 @@ gulp.task('callback', function (cb) {
         gulp.src('css/**/*.css')
             .pipe(watch('css/**/*.css'))
             .on('end', cb);
-    ));
+    });
 });
 ```
 
