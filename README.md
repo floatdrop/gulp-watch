@@ -13,7 +13,7 @@ var gulp = require('gulp'),
     watch = require('gulp-watch');
 
 gulp.task('stream', function () {
-    gulp.src('css/**/*.css')
+    return gulp.src('css/**/*.css')
         .pipe(watch('css/**/*.css'))
         .pipe(gulp.dest('build'));
 });
