@@ -56,7 +56,7 @@ Possible events:
 
 #### Options
 
-This object is passed to the [`chokidar` options](https://github.com/paulmillr/chokidar#api) directly. Options for [`gulp.src`](https://github.com/gulpjs/gulp#gulpsrcglobs-options) are also available. If you do not want content from `watch`, then add `read: false` to the `options` object.
+This object is passed to the [`chokidar` options](https://github.com/paulmillr/chokidar#api) directly. Options for [`gulp.src`](https://github.com/gulpjs/gulp/blob/master/docs/API.md#options) are also available. If you do not want content from `watch`, then add `read: false` to the `options` object.
 
 #### options.[ignoreInitial](https://github.com/paulmillr/chokidar#path-filtering)
 Type: `Boolean`  
