@@ -38,8 +38,8 @@ var batch = require('gulp-batch');
 gulp.task('build', function () { console.log('Working!'); });
 
 gulp.task('watch', function () {
-    watch('**/*.js', batch(function () {
-        gulp.start('build');
+    watch('**/*.js', batch(function (events, done) {
+        gulp.start('build', done);
     }));
 });
 ```
