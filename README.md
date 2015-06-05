@@ -92,7 +92,7 @@ This option will enable verbose output.
 Type: `Number`  
 Default: `10`
 
-Wait for `readDealy` milliseconds before reading the file.
+Wait for `readDelay` milliseconds before reading the file.
 
 ### Methods
 
