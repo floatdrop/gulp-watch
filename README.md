@@ -4,7 +4,7 @@ File watcher that uses super-fast [chokidar](https://github.com/paulmillr/chokid
 
 ## Installation
 
-Run `npm install gulp-watch`.
+Run `npm install --save-dev gulp-watch`.
 
 ## Usage
 
