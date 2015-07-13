@@ -104,9 +104,10 @@ Returned `Stream` from constructor has some useful methods:
 
 ### Events
 
- * `end`
- * `ready`
- * `error`
+All events from [chokidar](npmjs.com/chokidar):
+
+ * `add`, `change`, `unlink`, `addDir`, `unlinkDir`, `error`, `ready`, `raw`
+ 
 
 ### [Changelog](https://github.com/floatdrop/gulp-watch/releases)
 

@@ -47,9 +47,12 @@ module.exports = function (globs, opts, cb) {
     outputStream._read = function _read() { };
 
     var watcher = chokidar.watch(globs, opts)
-        .on('all', processEvent)
-        .on('error', outputStream.emit.bind(outputStream, 'error'))
-        .on('ready', outputStream.emit.bind(outputStream, 'ready'));
+        .on('all', processEvent);
+
+    ['add', 'change', 'unlink', 'addDir', 'unlinkDir', 'error', 'ready', 'raw']
+        .forEach(function (ev) {
+            watcher.on(ev, outputStream.emit.bind(outputStream, ev)); 
+        });
 
     outputStream.add = watcher.add.bind(watcher);
     outputStream.unwatch = watcher.unwatch.bind(watcher);
