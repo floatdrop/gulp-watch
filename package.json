@@ -28,14 +28,14 @@
   "devDependencies": {
     "coveralls": "^2.7.0",
     "istanbul": "^0.3.0",
-    "mocha": "~1.21.4",
-    "mocha-lcov-reporter": "^0.0.1",
+    "mocha": "^2",
+    "mocha-lcov-reporter": "0.0.2",
     "proxyquire": "^1.0.1",
     "rimraf": "^2.2.8",
-    "should": "~4.0.4",
+    "should": "~7",
     "sinon": "^1.9.1",
     "stream-assert": "^2.0.1",
-    "strip-ansi": "^2.0.0",
+    "strip-ansi": "^3.0.0",
     "touch": "0.0.3"
   },
   "dependencies": {
@@ -43,7 +43,7 @@
     "chokidar": "^1.0.3",
     "glob-parent": "^1.2.0",
     "gulp-util": "^3.0.6",
-    "is-glob": "^1.1.0",
+    "is-glob": "^2.0.0",
     "path-is-absolute": "^1.0.0",
     "readable-stream": "^2.0.1",
     "vinyl": "^0.5.0",
