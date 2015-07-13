@@ -20,6 +20,9 @@ module.exports = function (globs, opts, cb) {
         throw new PluginError('gulp-watch', 'glob should be String or Array, not ' + (typeof globs));
     }
 
+    // Remove ./ from globs
+    globs = globs.map(function (g) { return path.resolve(g); });
+
     if (typeof opts === 'function') {
         cb = opts;
         opts = {};
