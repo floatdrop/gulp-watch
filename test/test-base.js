@@ -2,7 +2,6 @@
 
 var watch = require('..');
 var path = require('path');
-var fs = require('fs');
 var rimraf = require('rimraf');
 var touch = require('./touch.js');
 require('should');
@@ -20,10 +19,21 @@ describe('base', function () {
         w.close();
     });
 
-    it('base property should be equal with ./', function (done) {
-        w = watch('./' + path.relative(process.cwd(), fixtures('**/*.js')), function (file) {
-            file.relative.should.eql('folder/index.js');
+    it('should be determined by glob', function (done) {
+        w = watch(fixtures('**/*.js'), function (file) {
+                file.relative.should.eql('folder/index.js');
+                file.base.should.eql(fixtures('/'));
+                done();
+            }).on('ready', touch(fixtures('folder/index.js')));
+    });
+
+    it('should be overridden by option', function (done) {
+        var explicitBase = fixtures('folder');
+        w = watch(fixtures('**/*.js'), {base: explicitBase}, function (file) {
+            file.relative.should.eql('index.js');
+            file.base.should.eql(explicitBase);
             done();
         }).on('ready', touch(fixtures('folder/index.js')));
     });
+
 });
