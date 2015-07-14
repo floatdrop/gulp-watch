@@ -6,10 +6,10 @@ var util = require('gulp-util'),
     Duplex = require('readable-stream').Duplex,
     vinyl = require('vinyl-file'),
     File = require('vinyl'),
-    globParent = require('glob-parent'),
     anymatch = require('anymatch'),
-    isGlob = require('is-glob'),
-    pathIsAbsolute = require('path-is-absolute');
+    pathIsAbsolute = require('path-is-absolute'),
+    glob2base = require('glob2base'),
+    Glob = require('glob').Glob;
 
 module.exports = function (globs, opts, cb) {
     if (!globs) throw new PluginError('gulp-watch', 'glob argument required');
@@ -29,14 +29,19 @@ module.exports = function (globs, opts, cb) {
     cb = cb || function () {};
 
     globs = globs.map(function resolveGlob(glob) {
-        var mod = '';
+        var mod = '',
+            resolveFn = path.resolve;
 
         if (glob[0] === '!') {
             mod = glob[0];
             glob = glob.slice(1);
         }
 
-        return mod + path.resolve(opts.cwd || process.cwd(), glob);
+        if (opts.cwd) {
+            resolveFn = path.normalize;
+        }
+
+        return mod + resolveFn(glob);
     });
 
     opts.events = opts.events || ['add', 'change', 'unlink'];
@@ -73,7 +78,7 @@ module.exports = function (globs, opts, cb) {
         var glob = globs[anymatch(globs, filepath, true)];
 
         if (!baseForced) {
-            opts.base = isGlob(glob) ? globParent(glob) : path.dirname(glob);
+            opts.base = glob2base(new Glob(glob));
         }
 
         // React only on opts.events
