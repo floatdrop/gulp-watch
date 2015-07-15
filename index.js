@@ -20,9 +20,6 @@ module.exports = function (globs, opts, cb) {
         throw new PluginError('gulp-watch', 'glob should be String or Array, not ' + (typeof globs));
     }
 
-    // Remove ./ from globs
-    globs = globs.map(function (g) { return path.resolve(g); });
-
     if (typeof opts === 'function') {
         cb = opts;
         opts = {};
@@ -30,6 +27,11 @@ module.exports = function (globs, opts, cb) {
 
     opts = opts || {};
     cb = cb || function () {};
+
+    // Remove ./ from globs
+    globs = globs.map(function (g) {
+        return path.resolve(opts.cwd || process.cwd(), g);
+    });
 
     opts.events = opts.events || ['add', 'change', 'unlink'];
     if (opts.ignoreInitial === undefined) { opts.ignoreInitial = true; }
@@ -51,7 +53,7 @@ module.exports = function (globs, opts, cb) {
 
     ['add', 'change', 'unlink', 'addDir', 'unlinkDir', 'error', 'ready', 'raw']
         .forEach(function (ev) {
-            watcher.on(ev, outputStream.emit.bind(outputStream, ev)); 
+            watcher.on(ev, outputStream.emit.bind(outputStream, ev));
         });
 
     outputStream.add = watcher.add.bind(watcher);
