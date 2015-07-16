@@ -1,4 +1,4 @@
-/* global describe, it, afterEach */
+/* global describe, it, afterEach, before, after */
 
 var watch = require('..');
 var join = require('path').join;
@@ -14,18 +14,23 @@ function fixtures(glob) {
 describe('ignore', function () {
     var w;
 
-    it('should ignore non-existent folders', function (done) {
+    before(function () {
         rimraf.sync(fixtures('temp'));
+    });
 
-        w = watch([fixtures('**/*.ts'), '!' + fixtures('temp')], function () {
+    it('should ignore non-existent folders', function (done) {
+        w = watch([fixtures('**/*.ts'), '!**/*.js'], function () {
             done('Ignored folder was watched');
         });
 
         w.on('ready', function () {
             fs.mkdirSync(fixtures('temp'));
-            touch(fixtures('temp/index.ts'))();
-            rimraf.sync(fixtures('temp'));
+            touch(fixtures('temp/index.js'))();
             setTimeout(done, 200);
         });
+    });
+
+    after(function () {
+        rimraf.sync(fixtures('temp'));
     });
 });

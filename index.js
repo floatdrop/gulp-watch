@@ -28,9 +28,15 @@ module.exports = function (globs, opts, cb) {
     opts = opts || {};
     cb = cb || function () {};
 
-    // Remove ./ from globs
-    globs = globs.map(function (g) {
-        return path.resolve(opts.cwd || process.cwd(), g);
+    globs = globs.map(function resolveGlob(glob) {
+        var mod = '';
+
+        if (glob[0] === '!') {
+            mod = glob[0];
+            glob = glob.slice(1);
+        }
+
+        return mod + path.resolve(opts.cwd || process.cwd(), glob);
     });
 
     opts.events = opts.events || ['add', 'change', 'unlink'];
