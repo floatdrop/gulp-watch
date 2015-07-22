@@ -12,7 +12,11 @@ function fixtures(glob) {
 }
 
 describe('base', function () {
-    var w;
+    var w, watchPath;
+
+    beforeEach(function () {
+        watchPath = './' + path.relative(process.cwd(), fixtures('**/*.js'));
+    });
 
     afterEach(function (done) {
         rimraf.sync(fixtures('newDir'));
@@ -20,10 +24,21 @@ describe('base', function () {
         w.close();
     });
 
-    it('base property should be equal with ./', function (done) {
-        w = watch('./' + path.relative(process.cwd(), fixtures('**/*.js')), function (file) {
-            file.relative.should.eql('folder/index.js');
+    it('should be determined by glob', function (done) {
+        w = watch(watchPath, function (file) {
+                file.relative.should.eql('folder/index.js');
+                file.base.should.eql(fixtures('/'));
+                done();
+            }).on('ready', touch(fixtures('folder/index.js')));
+    });
+
+    it('should be overridden by option', function (done) {
+        var explicitBase = fixtures('folder');
+        w = watch(watchPath, {base: explicitBase}, function (file) {
+            file.relative.should.eql('index.js');
+            file.base.should.eql(explicitBase);
             done();
         }).on('ready', touch(fixtures('folder/index.js')));
     });
+
 });
