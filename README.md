@@ -1,4 +1,4 @@
-# [gulp](https://github.com/gulpjs/gulp)-watch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
+# [gulp](https://github.com/gulpjs/gulp)-watch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
 File watcher that uses super-fast [chokidar](https://github.com/paulmillr/chokidar) and emits vinyl objects.
 
@@ -107,7 +107,7 @@ Returned `Stream` from constructor has some useful methods:
 All events from [chokidar](npmjs.com/chokidar):
 
  * `add`, `change`, `unlink`, `addDir`, `unlinkDir`, `error`, `ready`, `raw`
- 
+
 
 ### [Changelog](https://github.com/floatdrop/gulp-watch/releases)
 
@@ -120,9 +120,6 @@ MIT (c) 2014 Vsevolod Strukchinsky (floatdrop@gmail.com)
 
 [travis-url]: https://travis-ci.org/floatdrop/gulp-watch
 [travis-image]: http://img.shields.io/travis/floatdrop/gulp-watch.svg?style=flat
-
-[coveralls-url]: https://coveralls.io/r/floatdrop/gulp-watch
-[coveralls-image]: http://img.shields.io/coveralls/floatdrop/gulp-watch.svg?style=flat
 
 [depstat-url]: https://david-dm.org/floatdrop/gulp-watch
 [depstat-image]: http://img.shields.io/david/floatdrop/gulp-watch.svg?style=flat
