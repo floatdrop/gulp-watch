@@ -29,14 +29,19 @@ module.exports = function (globs, opts, cb) {
     cb = cb || function () {};
 
     globs = globs.map(function resolveGlob(glob) {
-        var mod = '';
+        var mod = '',
+            resolveFn = path.resolve;
 
         if (glob[0] === '!') {
             mod = glob[0];
             glob = glob.slice(1);
         }
 
-        return mod + path.resolve(opts.cwd || process.cwd(), glob);
+        if (opts.cwd) {
+            resolveFn = path.normalize;
+        }
+
+        return mod + resolveFn(glob);
     });
 
     opts.events = opts.events || ['add', 'change', 'unlink'];
