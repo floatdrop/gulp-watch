@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach, afterEach */
+/* global describe, it, afterEach */
 
 var watch = require('..');
 var path = require('path');
@@ -11,11 +11,7 @@ function fixtures(glob) {
 }
 
 describe('base', function () {
-    var w, watchPath;
-
-    beforeEach(function () {
-        watchPath = './' + path.relative(process.cwd(), fixtures('**/*.js'));
-    });
+    var w;
 
     afterEach(function (done) {
         rimraf.sync(fixtures('newDir'));
@@ -24,7 +20,7 @@ describe('base', function () {
     });
 
     it('should be determined by glob', function (done) {
-        w = watch(watchPath, function (file) {
+        w = watch(fixtures('**/*.js'), function (file) {
                 file.relative.should.eql('folder/index.js');
                 file.base.should.eql(fixtures('/'));
                 done();
@@ -33,7 +29,7 @@ describe('base', function () {
 
     it('should be overridden by option', function (done) {
         var explicitBase = fixtures('folder');
-        w = watch(watchPath, {base: explicitBase}, function (file) {
+        w = watch(fixtures('**/*.js'), {base: explicitBase}, function (file) {
             file.relative.should.eql('index.js');
             file.base.should.eql(explicitBase);
             done();
