@@ -1,8 +1,7 @@
-/* global describe, it, afterEach */
+/* global describe, it, beforeEach, afterEach */
 
 var watch = require('..');
 var path = require('path');
-var fs = require('fs');
 var rimraf = require('rimraf');
 var touch = require('./touch.js');
 require('should');
