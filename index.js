@@ -11,7 +11,7 @@ var util = require('gulp-util'),
     glob2base = require('glob2base'),
     Glob = require('glob').Glob;
 
-module.exports = function (globs, opts, cb) {
+function normalizeGlobs(globs) {
     if (!globs) throw new PluginError('gulp-watch', 'glob argument required');
 
     if (typeof globs === 'string') globs = [globs];
@@ -19,6 +19,11 @@ module.exports = function (globs, opts, cb) {
     if (!Array.isArray(globs)) {
         throw new PluginError('gulp-watch', 'glob should be String or Array, not ' + (typeof globs));
     }
+    return globs;
+}
+
+module.exports = function (globs, opts, cb) {
+    globs = normalizeGlobs(globs);
 
     if (typeof opts === 'function') {
         cb = opts;
@@ -28,7 +33,7 @@ module.exports = function (globs, opts, cb) {
     opts = opts || {};
     cb = cb || function () {};
 
-    globs = globs.map(function resolveGlob(glob) {
+    function resolveGlob(glob) {
         var mod = '',
             resolveFn = path.resolve;
 
@@ -42,7 +47,8 @@ module.exports = function (globs, opts, cb) {
         }
 
         return mod + resolveFn(glob);
-    });
+    }
+    globs = globs.map(resolveGlob);
 
     opts.events = opts.events || ['add', 'change', 'unlink'];
     if (opts.ignoreInitial === undefined) { opts.ignoreInitial = true; }
@@ -67,7 +73,12 @@ module.exports = function (globs, opts, cb) {
             watcher.on(ev, outputStream.emit.bind(outputStream, ev));
         });
 
-    outputStream.add = watcher.add.bind(watcher);
+    outputStream.add = function add(newGlobs) {
+        newGlobs = normalizeGlobs(newGlobs)
+            .map(resolveGlob);
+        watcher.add(newGlobs);
+        globs.push.apply(globs, newGlobs);
+    };
     outputStream.unwatch = watcher.unwatch.bind(watcher);
     outputStream.close = function () {
         watcher.close();
