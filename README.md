@@ -104,7 +104,7 @@ Returned `Stream` from constructor has some useful methods:
 
 ### Events
 
-All events from [chokidar](npmjs.com/chokidar):
+All events from [chokidar](http://npmjs.com/chokidar):
 
  * `add`, `change`, `unlink`, `addDir`, `unlinkDir`, `error`, `ready`, `raw`
 
