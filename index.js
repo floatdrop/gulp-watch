@@ -59,7 +59,7 @@ module.exports = function (globs, opts, cb) {
 
     outputStream._write = function _write(file, enc, done) {
         cb(file);
-        outputStream.push(file);
+        this.push(file);
         done();
     };
 
@@ -82,7 +82,7 @@ module.exports = function (globs, opts, cb) {
     outputStream.unwatch = watcher.unwatch.bind(watcher);
     outputStream.close = function () {
         watcher.close();
-        outputStream.emit('end');
+        this.emit('end');
     };
 
     function processEvent(event, filepath) {
