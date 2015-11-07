@@ -1,4 +1,4 @@
-# [gulp](https://github.com/gulpjs/gulp)-watch [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
+# [gulp](https://github.com/gulpjs/gulp)-watch [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
 File watcher that uses super-fast [chokidar](https://github.com/paulmillr/chokidar) and emits vinyl objects.
 

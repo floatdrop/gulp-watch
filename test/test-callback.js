@@ -8,67 +8,67 @@ var touch = require('./touch.js');
 require('should');
 
 function fixtures(glob) {
-    return path.join(__dirname, 'fixtures', glob);
+	return path.join(__dirname, 'fixtures', glob);
 }
 
 describe('callback', function () {
-    var w;
+	var w;
 
-    afterEach(function (done) {
-        rimraf.sync(fixtures('newDir'));
-        w.on('end', done);
-        w.close();
-    });
+	afterEach(function (done) {
+		rimraf.sync(fixtures('newDir'));
+		w.on('end', done);
+		w.close();
+	});
 
-    it('should be called on add event', function (done) {
-        w = watch(fixtures('*.js'), function (file) {
-            file.relative.should.eql('index.js');
-            file.event.should.eql('change');
-            done();
-        }).on('ready', touch(fixtures('index.js')));
-    });
+	it('should be called on add event', function (done) {
+		w = watch(fixtures('*.js'), function (file) {
+			file.relative.should.eql('index.js');
+			file.event.should.eql('change');
+			done();
+		}).on('ready', touch(fixtures('index.js')));
+	});
 
-    it('should be called on non-glob pattern', function (done) {
-        w = watch(fixtures('index.js'), function (file) {
-            file.relative.should.eql('index.js');
-            file.event.should.eql('change');
-            done();
-        }).on('ready', touch(fixtures('index.js')));
-    });
+	it('should be called on non-glob pattern', function (done) {
+		w = watch(fixtures('index.js'), function (file) {
+			file.relative.should.eql('index.js');
+			file.event.should.eql('change');
+			done();
+		}).on('ready', touch(fixtures('index.js')));
+	});
 
-    it('should be called on add event in new directory', function (done) {
-        rimraf.sync(fixtures('newDir'));
+	it('should be called on add event in new directory', function (done) {
+		rimraf.sync(fixtures('newDir'));
 
-        w = watch(fixtures('**/*.ts'), function (file) {
-            file.relative.should.eql(path.normalize('newDir/index.ts'));
-            done();
-        }).on('ready', function () {
-            fs.mkdirSync(fixtures('newDir'));
-            touch(fixtures('newDir/index.ts'))();
-        });
-    });
+		w = watch(fixtures('**/*.ts'), function (file) {
+			file.relative.should.eql(path.normalize('newDir/index.ts'));
+			done();
+		}).on('ready', function () {
+			fs.mkdirSync(fixtures('newDir'));
+			touch(fixtures('newDir/index.ts'))();
+		});
+	});
 
-    it('unlinked `file.path` should be absolute (absolute glob)', function (done) {
-        fs.mkdirSync(fixtures('newDir'));
-        touch(fixtures('newDir/index.ts'), function () {
-            w = watch(fixtures('**/*.ts'), { base: 'newDir/' }, function (file) {
-                file.path.should.eql(path.normalize(fixtures('newDir/index.ts')));
-                done();
-            }).on('ready', function () {
-                fs.unlinkSync(fixtures('newDir/index.ts'));
-            });
-        })();
-    });
+	it('unlinked `file.path` should be absolute (absolute glob)', function (done) {
+		fs.mkdirSync(fixtures('newDir'));
+		touch(fixtures('newDir/index.ts'), function () {
+			w = watch(fixtures('**/*.ts'), {base: 'newDir/'}, function (file) {
+				file.path.should.eql(path.normalize(fixtures('newDir/index.ts')));
+				done();
+			}).on('ready', function () {
+				fs.unlinkSync(fixtures('newDir/index.ts'));
+			});
+		})();
+	});
 
-    it('unlinked `file.path` should be absolute (relative glob)', function (done) {
-        fs.mkdirSync(fixtures('newDir'));
-        touch(fixtures('newDir/index.ts'), function () {
-            w = watch('test/fixtures/**/*.ts', { base: 'newDir/' }, function (file) {
-                file.path.should.eql(path.normalize(fixtures('newDir/index.ts')));
-                done();
-            }).on('ready', function () {
-                fs.unlinkSync(fixtures('newDir/index.ts'));
-            });
-        })();
-    });
+	it('unlinked `file.path` should be absolute (relative glob)', function (done) {
+		fs.mkdirSync(fixtures('newDir'));
+		touch(fixtures('newDir/index.ts'), function () {
+			w = watch('test/fixtures/**/*.ts', {base: 'newDir/'}, function (file) {
+				file.path.should.eql(path.normalize(fixtures('newDir/index.ts')));
+				done();
+			}).on('ready', function () {
+				fs.unlinkSync(fixtures('newDir/index.ts'));
+			});
+		})();
+	});
 });
