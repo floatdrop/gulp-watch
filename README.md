@@ -1,4 +1,4 @@
-# [gulp](https://github.com/gulpjs/gulp)-watch [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
+# [gulp](https://github.com/gulpjs/gulp)-watch [![Build Status: Linux][travis-image]][travis-url] [![Build Status: Windows][appveyor-image]][appveyor-url] [![Dependency Status][depstat-image]][depstat-url]
 
 File watcher that uses super-fast [chokidar](https://github.com/paulmillr/chokidar) and emits vinyl objects.
 
@@ -122,6 +122,9 @@ MIT (c) 2014 Vsevolod Strukchinsky (floatdrop@gmail.com)
 
 [travis-url]: https://travis-ci.org/floatdrop/gulp-watch
 [travis-image]: http://img.shields.io/travis/floatdrop/gulp-watch.svg?style=flat
+
+[appveyor-url]: https://ci.appveyor.com/project/floatdrop/gulp-watch/branch/master
+[appveyor-image]: https://ci.appveyor.com/api/projects/status/xscfpq7hkf8gduj8/branch/master?svg=true
 
 [depstat-url]: https://david-dm.org/floatdrop/gulp-watch
 [depstat-image]: http://img.shields.io/david/floatdrop/gulp-watch.svg?style=flat
