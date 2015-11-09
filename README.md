@@ -124,7 +124,7 @@ MIT (c) 2014 Vsevolod Strukchinsky (floatdrop@gmail.com)
 [travis-image]: http://img.shields.io/travis/floatdrop/gulp-watch.svg?style=flat
 
 [appveyor-url]: https://ci.appveyor.com/project/floatdrop/gulp-watch/branch/master
-[appveyor-image]: https://ci.appveyor.com/api/projects/status/xscfpq7hkf8gduj8/branch/master?svg=true
+[appveyor-image]: https://ci.appveyor.com/api/projects/status/gmjwsqmxht1m131s?svg=true
 
 [depstat-url]: https://david-dm.org/floatdrop/gulp-watch
 [depstat-image]: http://img.shields.io/david/floatdrop/gulp-watch.svg?style=flat
