@@ -97,6 +97,10 @@ module.exports = function (globs, opts, cb) {
 	function processEvent(event, filepath) {
 		var glob = globs[anymatch(globs, filepath, true)];
 
+		if (!glob) {
+			return;
+		}
+
 		if (!baseForced) {
 			opts.base = glob2base(new Glob(glob));
 		}
