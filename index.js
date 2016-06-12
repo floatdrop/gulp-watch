@@ -74,8 +74,11 @@ module.exports = function (globs, opts, cb) {
 
 	outputStream._read = function _read() { };
 
-	var watcher = chokidar.watch(globs, opts)
-		.on('all', processEvent);
+	var watcher = chokidar.watch(globs, opts);
+
+	opts.events.forEach(function (ev) {
+		watcher.on(ev, processEvent.bind(undefined, ev));
+	});
 
 	['add', 'change', 'unlink', 'addDir', 'unlinkDir', 'error', 'ready', 'raw']
 		.forEach(function (ev) {
@@ -95,19 +98,23 @@ module.exports = function (globs, opts, cb) {
 	};
 
 	function processEvent(event, filepath) {
-		var glob = globs[anymatch(globs, filepath, true)];
+		var glob;
+		var currentFilepath = filepath;
+		while (!(glob = globs[anymatch(globs, currentFilepath, true)]) && currentFilepath !== (currentFilepath = path.resolve(currentFilepath, '..'))) {} // eslint-disable-line no-empty-blocks/no-empty-blocks
 
 		if (!glob) {
+			util.log(
+				util.colors.cyan('[gulp-watch]'),
+				util.colors.yellow('wut? This shouldn\'t happen. Please open this link to report the issue:\n') +
+				'https://github.com/floatdrop/gulp-watch/issues/new?title=' +
+				encodeURIComponent('Watched unexpected filepath') + '&body=' +
+				encodeURIComponent('Globs: `' + JSON.stringify(globs) + '`\nFilepath: `' + filepath + '`\nOptions:\n```js\n' + JSON.stringify(opts, null, 2) + '\n```')
+			);
 			return;
 		}
 
 		if (!baseForced) {
 			opts.base = glob2base(new Glob(glob));
-		}
-
-		// React only on opts.events
-		if (opts.events.indexOf(event) === -1) {
-			return;
 		}
 
 		// Do not stat deleted files

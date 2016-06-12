@@ -20,14 +20,14 @@ describe('dir', function () {
 		w.close();
 	});
 
-	it('should not watch files inside directory', function (done) {
+	it('should watch files inside directory', function (done) {
 		fs.mkdirSync(fixtures('newDir'));
 		touch(fixtures('newDir/index.js'))();
-		w = watch(fixtures('newDir'), function () {
-			done('Watched unexpected file.');
+		w = watch(fixtures('newDir'), function (file) {
+			file.relative.should.eql(path.normalize('newDir/index.js'));
+			done();
 		}).on('ready', function () {
 			touch(fixtures('newDir/index.js'))('new content');
-			setTimeout(done, 200);
 		});
 	});
 
