@@ -38,20 +38,22 @@ module.exports = function (globs, opts, cb) {
 	opts = opts || {};
 	cb = cb || function () {};
 
+	function resolveFilepath(filepath) {
+		if (pathIsAbsolute(filepath)) {
+			return filepath;
+		}
+		return path.resolve(opts.cwd || process.cwd(), filepath);
+	}
+
 	function resolveGlob(glob) {
 		var mod = '';
-		var resolveFn = path.resolve;
 
 		if (glob[0] === '!') {
 			mod = glob[0];
 			glob = glob.slice(1);
 		}
 
-		if (opts.cwd) {
-			resolveFn = path.normalize;
-		}
-
-		return mod + resolveFn(glob);
+		return mod + resolveFilepath(glob);
 	}
 	globs = globs.map(resolveGlob);
 
@@ -98,9 +100,7 @@ module.exports = function (globs, opts, cb) {
 	};
 
 	function processEvent(event, filepath) {
-		if (!pathIsAbsolute(filepath)) {
-			filepath = path.resolve(opts.cwd || process.cwd(), filepath);
-		}
+		filepath = resolveFilepath(filepath);
 
 		var glob;
 		var currentFilepath = filepath;

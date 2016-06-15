@@ -21,7 +21,7 @@ describe('cwd', function () {
 
 	it('should respect opts.cwd', function (done) {
 		w = watch('index.js', {cwd: fixtures('')}, function (file) {
-			file.relative.should.eql(path.normalize('test/fixtures/index.js'));
+			file.relative.should.eql(path.normalize('index.js'));
 			done();
 		}).on('ready', touch(fixtures('index.js')));
 	});
