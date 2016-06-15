@@ -25,4 +25,11 @@ describe('cwd', function () {
 			done();
 		}).on('ready', touch(fixtures('index.js')));
 	});
+
+	it('should emit file outside opts.cwd', function (done) {
+		w = watch(fixtures('index.js'), {cwd: fixtures('folder')}, function (file) {
+			file.relative.should.eql('index.js');
+			done();
+		}).on('ready', touch(fixtures('index.js')));
+	});
 });

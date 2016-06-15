@@ -98,6 +98,10 @@ module.exports = function (globs, opts, cb) {
 	};
 
 	function processEvent(event, filepath) {
+		if (!pathIsAbsolute(filepath)) {
+			filepath = path.resolve(opts.cwd || process.cwd(), filepath);
+		}
+
 		var glob;
 		var currentFilepath = filepath;
 		while (!(glob = globs[anymatch(globs, currentFilepath, true)]) && currentFilepath !== (currentFilepath = path.resolve(currentFilepath, '..'))) {} // eslint-disable-line no-empty-blocks/no-empty-blocks
@@ -119,7 +123,7 @@ module.exports = function (globs, opts, cb) {
 
 		// Do not stat deleted files
 		if (event === 'unlink' || event === 'unlinkDir') {
-			opts.path = pathIsAbsolute(filepath) ? filepath : path.join(opts.cwd || process.cwd(), filepath);
+			opts.path = filepath;
 
 			write(event, null, new File(opts));
 			return;
