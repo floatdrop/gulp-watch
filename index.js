@@ -1,5 +1,6 @@
 'use strict';
 var util = require('gulp-util');
+var assign = require('object-assign');
 var path = require('path');
 var PluginError = require('gulp-util').PluginError;
 var chokidar = require('chokidar');
@@ -35,7 +36,7 @@ module.exports = function (globs, opts, cb) {
 		opts = {};
 	}
 
-	opts = opts || {};
+	opts = assign({}, opts);
 	cb = cb || function () {};
 
 	function resolveFilepath(filepath) {
@@ -101,6 +102,7 @@ module.exports = function (globs, opts, cb) {
 
 	function processEvent(event, filepath) {
 		filepath = resolveFilepath(filepath);
+		var fileOpts = assign({}, opts);
 
 		var glob;
 		var currentFilepath = filepath;
@@ -118,20 +120,20 @@ module.exports = function (globs, opts, cb) {
 		}
 
 		if (!baseForced) {
-			opts.base = glob2base(new Glob(glob));
+			fileOpts.base = glob2base(new Glob(glob));
 		}
 
 		// Do not stat deleted files
 		if (event === 'unlink' || event === 'unlinkDir') {
-			opts.path = filepath;
+			fileOpts.path = filepath;
 
-			write(event, null, new File(opts));
+			write(event, null, new File(fileOpts));
 			return;
 		}
 
 		// Workaround for early read
 		setTimeout(function () {
-			vinyl.read(filepath, opts, write.bind(null, event));
+			vinyl.read(filepath, fileOpts, write.bind(null, event));
 		}, opts.readDelay);
 	}
 

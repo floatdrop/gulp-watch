@@ -44,6 +44,7 @@
     "glob": "^7.0.3",
     "glob2base": "0.0.12",
     "gulp-util": "^3.0.6",
+    "object-assign": "^4.1.0",
     "path-is-absolute": "^1.0.0",
     "readable-stream": "^2.0.1",
     "vinyl": "^0.5.0",
