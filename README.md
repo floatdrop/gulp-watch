@@ -96,6 +96,12 @@ Default: `10`
 
 Wait for `readDelay` milliseconds before reading the file.
 
+#### options.read
+Type: `Boolean`  
+Default: `true`
+
+Setting this to `false` will return `file.contents` as null and not read the file at all. Most useful as an optimization if your plugins pipeline doesn't make use of the file contents (e.g. `gulp-clean`), or to avoid reading the file twice if you use `gulp.src()` inside the callback instead of the file object that is passed as argument.
+
 ### Methods
 
 Returned `Stream` from constructor has some useful methods:
