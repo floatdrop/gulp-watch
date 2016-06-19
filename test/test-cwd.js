@@ -2,7 +2,7 @@
 
 var watch = require('..');
 var path = require('path');
-var touch = require('./touch.js');
+var touch = require('./util/touch');
 require('should');
 
 function fixtures(glob) {

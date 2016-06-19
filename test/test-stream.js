@@ -2,7 +2,7 @@
 
 var watch = require('..');
 var join = require('path').join;
-var touch = require('./touch.js');
+var touch = require('./util/touch');
 var fs = require('fs');
 var rimraf = require('rimraf');
 require('should');

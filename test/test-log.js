@@ -10,7 +10,7 @@ var watch = proxyquire('..', {
 var sinon = require('sinon');
 
 var path = require('path');
-var touch = require('./touch.js');
+var touch = require('./util/touch');
 var strip = require('strip-ansi');
 
 require('should');

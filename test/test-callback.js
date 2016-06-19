@@ -4,7 +4,7 @@ var watch = require('..');
 var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
-var touch = require('./touch.js');
+var touch = require('./util/touch');
 require('should');
 
 function fixtures(glob) {
