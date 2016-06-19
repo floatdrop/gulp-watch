@@ -2,7 +2,6 @@
 
 var watch = require('..');
 var path = require('path');
-var rimraf = require('rimraf');
 var touch = require('./touch.js');
 require('should');
 
@@ -14,7 +13,6 @@ describe('base', function () {
 	var w;
 
 	afterEach(function (done) {
-		rimraf.sync(fixtures('newDir'));
 		w.on('end', done);
 		w.close();
 	});

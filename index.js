@@ -27,7 +27,7 @@ function normalizeGlobs(globs) {
 	return globs;
 }
 
-module.exports = function (globs, opts, cb) {
+function watch(globs, opts, cb) {
 	globs = normalizeGlobs(globs);
 
 	if (typeof opts === 'function') {
@@ -35,7 +35,7 @@ module.exports = function (globs, opts, cb) {
 		opts = {};
 	}
 
-	opts = assign({}, opts);
+	opts = assign({}, watch._defaultOptions, opts);
 	cb = cb || function () {};
 
 	function resolveFilepath(filepath) {
@@ -56,14 +56,6 @@ module.exports = function (globs, opts, cb) {
 		return mod + resolveFilepath(glob);
 	}
 	globs = globs.map(resolveGlob);
-
-	opts.events = opts.events || ['add', 'change', 'unlink'];
-
-	if (opts.ignoreInitial === undefined) {
-		opts.ignoreInitial = true;
-	}
-
-	opts.readDelay = opts.readDelay || 10;
 
 	var baseForced = Boolean(opts.base);
 	var outputStream = new Duplex({objectMode: true, allowHalfOpen: true});
@@ -164,4 +156,16 @@ module.exports = function (globs, opts, cb) {
 	}
 
 	return outputStream;
+}
+
+// This is not part of the public API as that would lead to global state (singleton) pollution,
+// and allow unexpected interference between unrelated modules that make use of gulp-watch.
+// This can be useful for unit tests and root application configuration, though.
+// Avoid modifying gulp-watch's default options inside a library/reusable package, please.
+watch._defaultOptions = {
+	events: ['add', 'change', 'unlink'],
+	ignoreInitial: true,
+	readDelay: 10
 };
+
+module.exports = watch;

@@ -15,8 +15,10 @@ describe('callback', function () {
 	var w;
 
 	afterEach(function (done) {
-		rimraf.sync(fixtures('newDir'));
-		w.on('end', done);
+		w.on('end', function () {
+			rimraf.sync(fixtures('newDir'));
+			done();
+		});
 		w.close();
 	});
 
@@ -37,8 +39,6 @@ describe('callback', function () {
 	});
 
 	it('should be called on add event in new directory', function (done) {
-		rimraf.sync(fixtures('newDir'));
-
 		w = watch(fixtures('**/*.ts'), function (file) {
 			file.relative.should.eql(path.normalize('newDir/index.ts'));
 			done();

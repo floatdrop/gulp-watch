@@ -23,7 +23,7 @@ describe('api', function () {
 		});
 
 		it('should emit added file', function (done) {
-			w = watch(fixtures('*/*.js'));
+			w = watch(fixtures('folder'));
 			w.add(fixtures('*.js'));
 			w.on('data', function (file) {
 				file.relative.should.eql('new.js');

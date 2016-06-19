@@ -15,8 +15,10 @@ describe('dir', function () {
 	var w;
 
 	afterEach(function (done) {
-		rimraf.sync(fixtures('newDir'));
-		w.on('end', done);
+		w.on('end', function () {
+			rimraf.sync(fixtures('newDir'));
+			done();
+		});
 		w.close();
 	});
 
