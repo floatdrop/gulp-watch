@@ -9,7 +9,7 @@ function fixtures(glob) {
 }
 
 describe('opts', function () {
-	it.only('should not mutate the options object', function () {
+	it('should not mutate the options object', function () {
 		var opts = {};
 		watch(fixtures('index.js'), opts).close();
 		opts.should.have.keys([]);
