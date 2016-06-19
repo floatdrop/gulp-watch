@@ -22,7 +22,7 @@ describe('base', function () {
 	it('should be determined by glob', function (done) {
 		w = watch(fixtures('**/*.js'), function (file) {
 			file.relative.should.eql(path.normalize('folder/index.js'));
-			file.base.should.eql(fixtures('/'));
+			file.base.should.eql(fixtures(''));
 			done();
 		}).on('ready', touch(fixtures('folder/index.js')));
 	});

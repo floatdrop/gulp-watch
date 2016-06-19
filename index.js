@@ -9,8 +9,7 @@ var vinyl = require('vinyl-file');
 var File = require('vinyl');
 var anymatch = require('anymatch');
 var pathIsAbsolute = require('path-is-absolute');
-var glob2base = require('glob2base');
-var Glob = require('glob').Glob;
+var globParent = require('glob-parent');
 
 function normalizeGlobs(globs) {
 	if (!globs) {
@@ -106,7 +105,7 @@ module.exports = function (globs, opts, cb) {
 
 		var glob;
 		var currentFilepath = filepath;
-		while (!(glob = globs[anymatch(globs, currentFilepath, true)]) && currentFilepath !== (currentFilepath = path.resolve(currentFilepath, '..'))) {} // eslint-disable-line no-empty-blocks/no-empty-blocks
+		while (!(glob = globs[anymatch(globs, currentFilepath, true)]) && currentFilepath !== (currentFilepath = path.dirname(currentFilepath))) {} // eslint-disable-line no-empty-blocks/no-empty-blocks
 
 		if (!glob) {
 			util.log(
@@ -120,7 +119,7 @@ module.exports = function (globs, opts, cb) {
 		}
 
 		if (!baseForced) {
-			fileOpts.base = glob2base(new Glob(glob));
+			fileOpts.base = globParent(glob);
 		}
 
 		// Do not stat deleted files
