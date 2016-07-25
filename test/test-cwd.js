@@ -39,4 +39,38 @@ describe('cwd', function () {
 			done();
 		}).on('ready', touch(fixtures('index.js'), 'fixtures index'));
 	});
+
+	it('should normalized reported paths with non-normalized cwd and non-normalized relative glob', function (done) {
+		w = watch('../fixtures/index.js', {cwd: fixtures('../util')}, function (file) {
+			file.path.should.eql(fixtures('index.js'));
+			done();
+		}).on('ready', touch(fixtures('index.js'), 'fixtures index'));
+	});
+
+	it('should normalized reported paths with non-normalized cwd and non-normalized absolute glob', function (done) {
+		w = watch(fixtures('../fixtures/index.js'), {cwd: fixtures('../util')}, function (file) {
+			file.path.should.eql(fixtures('index.js'));
+			done();
+		}).on('ready', touch(fixtures('index.js'), 'fixtures index'));
+	});
+
+	it('should normalized reported paths with non-normalized relative glob outside implicit cwd', function (done) {
+		var cwd = process.cwd();
+		process.chdir(fixtures('../util'));
+		w = watch('../fixtures/index.js', function (file) {
+			process.chdir(cwd);
+			file.path.should.eql(fixtures('index.js'));
+			done();
+		}).on('ready', touch(fixtures('index.js'), 'fixtures index'));
+	});
+
+	it('should normalized reported paths with non-normalized absolute glob outside implicit cwd', function (done) {
+		var cwd = process.cwd();
+		process.chdir(fixtures('../util'));
+		w = watch(fixtures('../fixtures/index.js'), {cwd: fixtures('../util')}, function (file) {
+			process.chdir(cwd);
+			file.path.should.eql(fixtures('index.js'));
+			done();
+		}).on('ready', touch(fixtures('index.js'), 'fixtures index'));
+	});
 });
