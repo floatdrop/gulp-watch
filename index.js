@@ -28,6 +28,7 @@ function normalizeGlobs(globs) {
 }
 
 function watch(globs, opts, cb) {
+	var originalGlobs = globs;
 	globs = normalizeGlobs(globs);
 
 	if (typeof opts === 'function') {
@@ -40,7 +41,7 @@ function watch(globs, opts, cb) {
 
 	function resolveFilepath(filepath) {
 		if (pathIsAbsolute(filepath)) {
-			return filepath;
+			return path.normalize(filepath);
 		}
 		return path.resolve(opts.cwd || process.cwd(), filepath);
 	}
@@ -102,10 +103,10 @@ function watch(globs, opts, cb) {
 		if (!glob) {
 			util.log(
 				util.colors.cyan('[gulp-watch]'),
-				util.colors.yellow('wut? This shouldn\'t happen. Please open this link to report the issue:\n') +
+				util.colors.yellow('Watched unexpected path. This is likely a bug. Please open this link to report the issue:\n') +
 				'https://github.com/floatdrop/gulp-watch/issues/new?title=' +
 				encodeURIComponent('Watched unexpected filepath') + '&body=' +
-				encodeURIComponent('Globs: `' + JSON.stringify(globs) + '`\nFilepath: `' + filepath + '`\nOptions:\n```js\n' + JSON.stringify(opts, null, 2) + '\n```')
+				encodeURIComponent('gulp-watch version: `' + require('./package.json').version + '`\nGlobs: `' + JSON.stringify(originalGlobs) + '`\nFilepath: `' + filepath + '`\nEvent: `' + event + '`\nProcess CWD: `' + process.cwd() + '`\nOptions:\n```js\n' + JSON.stringify(opts, null, 2) + '\n```')
 			);
 			return;
 		}
