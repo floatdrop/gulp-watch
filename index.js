@@ -125,7 +125,9 @@ function watch(globs, opts, cb) {
 
 		// Workaround for early read
 		setTimeout(function () {
-			vinyl.read(filepath, fileOpts, write.bind(null, event));
+			vinyl.read(filepath, fileOpts).then(function (file) {
+				write(event, null, file);
+			});
 		}, opts.readDelay);
 	}
 
