@@ -106,7 +106,7 @@ function watch(globs, opts, cb) {
 				util.colors.yellow('Watched unexpected path. This is likely a bug. Please open this link to report the issue:\n') +
 				'https://github.com/floatdrop/gulp-watch/issues/new?title=' +
 				encodeURIComponent('Watched unexpected filepath') + '&body=' +
-				encodeURIComponent('gulp-watch version: `' + require('./package.json').version + '`\nGlobs: `' + JSON.stringify(originalGlobs) + '`\nFilepath: `' + filepath + '`\nEvent: `' + event + '`\nProcess CWD: `' + process.cwd() + '`\nOptions:\n```js\n' + JSON.stringify(opts, null, 2) + '\n```')
+				encodeURIComponent('Node.js version: `' + process.version + ' ' + process.platform + ' ' + process.arch + '`\ngulp-watch version: `' + require('./package.json').version + '`\nGlobs: `' + JSON.stringify(originalGlobs) + '`\nFilepath: `' + filepath + '`\nEvent: `' + event + '`\nProcess CWD: `' + process.cwd() + '`\nOptions:\n```js\n' + JSON.stringify(opts, null, 2) + '\n```')
 			);
 			return;
 		}
