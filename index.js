@@ -10,6 +10,7 @@ var File = require('vinyl');
 var anymatch = require('anymatch');
 var pathIsAbsolute = require('path-is-absolute');
 var globParent = require('glob-parent');
+var slash = require('slash');
 
 function normalizeGlobs(globs) {
 	if (!globs) {
@@ -54,7 +55,7 @@ function watch(globs, opts, cb) {
 			glob = glob.slice(1);
 		}
 
-		return mod + resolveFilepath(glob);
+		return mod + slash(resolveFilepath(glob));
 	}
 	globs = globs.map(resolveGlob);
 
@@ -112,7 +113,7 @@ function watch(globs, opts, cb) {
 		}
 
 		if (!baseForced) {
-			fileOpts.base = globParent(glob);
+			fileOpts.base = path.normalize(globParent(glob));
 		}
 
 		// Do not stat deleted files
