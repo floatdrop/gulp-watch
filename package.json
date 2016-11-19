@@ -46,6 +46,7 @@
     "object-assign": "^4.1.0",
     "path-is-absolute": "^1.0.0",
     "readable-stream": "^2.0.1",
+    "slash": "^1.0.0",
     "vinyl": "^1.2.0",
     "vinyl-file": "^2.0.0"
   },
