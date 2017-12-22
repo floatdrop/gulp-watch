@@ -47,7 +47,7 @@
     "path-is-absolute": "^1.0.1",
     "readable-stream": "^2.2.2",
     "slash": "^1.0.0",
-    "vinyl": "^1.2.0",
+    "vinyl": "^2.1.0",
     "vinyl-file": "^2.0.0"
   },
   "engine": "node >= 0.10"
