@@ -9,7 +9,7 @@
     "gulpplugin"
   ],
   "scripts": {
-    "test": "xo && mocha -r test/util/set-default-options -R spec test/test-*",
+    "test": "xo && mocha -r test/util/set-default-options -t 5000 -R spec test/test-*",
     "coverage": "istanbul cover node_modules/.bin/_mocha --report html -- -r test/util/set-default-options -R spec",
     "coveralls": "istanbul cover _mocha --report lcovonly -- -r test/util/set-default-options -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
