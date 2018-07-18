@@ -1,8 +1,9 @@
 'use strict';
-var util = require('gulp-util');
 var assign = require('object-assign');
 var path = require('path');
-var PluginError = require('gulp-util').PluginError;
+var PluginError = require('plugin-error');
+var fancyLog = require('fancy-log');
+var colors = require('ansi-colors');
 var chokidar = require('chokidar');
 var Duplex = require('readable-stream').Duplex;
 var vinyl = require('vinyl-file');
@@ -102,9 +103,9 @@ function watch(globs, opts, cb) {
 		while (!(glob = globs[anymatch(globs, currentFilepath, true)]) && currentFilepath !== (currentFilepath = path.dirname(currentFilepath))) {} // eslint-disable-line no-empty-blocks/no-empty-blocks
 
 		if (!glob) {
-			util.log(
-				util.colors.cyan('[gulp-watch]'),
-				util.colors.yellow('Watched unexpected path. This is likely a bug. Please open this link to report the issue:\n') +
+			fancyLog.info(
+				colors.cyan('[gulp-watch]'),
+				colors.yellow('Watched unexpected path. This is likely a bug. Please open this link to report the issue:\n') +
 				'https://github.com/floatdrop/gulp-watch/issues/new?title=' +
 				encodeURIComponent('Watched unexpected filepath') + '&body=' +
 				encodeURIComponent('Node.js version: `' + process.version + ' ' + process.platform + ' ' + process.arch + '`\ngulp-watch version: `' + require('./package.json').version + '`\nGlobs: `' + JSON.stringify(originalGlobs) + '`\nFilepath: `' + filepath + '`\nEvent: `' + event + '`\nProcess CWD: `' + process.cwd() + '`\nOptions:\n```js\n' + JSON.stringify(opts, null, 2) + '\n```')
@@ -150,13 +151,13 @@ function watch(globs, opts, cb) {
 	function log(event, file) {
 		event = event[event.length - 1] === 'e' ? event + 'd' : event + 'ed';
 
-		var msg = [util.colors.magenta(file.relative), 'was', event];
+		var msg = [colors.magenta(file.relative), 'was', event];
 
 		if (opts.name) {
-			msg.unshift(util.colors.cyan(opts.name) + ' saw');
+			msg.unshift(colors.cyan(opts.name) + ' saw');
 		}
 
-		util.log.apply(util, msg);
+		fancyLog.info.apply(null, msg);
 	}
 
 	return outputStream;
