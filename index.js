@@ -11,7 +11,7 @@ var File = require('vinyl');
 var anymatch = require('anymatch');
 var pathIsAbsolute = require('path-is-absolute');
 var globParent = require('glob-parent');
-var slash = require('slash');
+var normalize = require('normalize-path');
 
 function normalizeGlobs(globs) {
 	if (!globs) {
@@ -56,7 +56,7 @@ function watch(globs, opts, cb) {
 			glob = glob.slice(1);
 		}
 
-		return mod + slash(resolveFilepath(glob));
+		return mod + normalize(resolveFilepath(glob));
 	}
 	globs = globs.map(resolveGlob);
 
