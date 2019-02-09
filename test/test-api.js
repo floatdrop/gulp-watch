@@ -18,12 +18,32 @@ describe('api', function () {
 	afterEach(function (done) {
 		w.on('end', function () {
 			rimraf.sync(fixtures('new.js'));
+			rimraf.sync(fixtures('.bin'));
 			done();
 		});
 		w.close();
 	});
 
 	describe('Basic functionality', function () {
+		it('should not report unexpected files when using relative globs', function (done) {
+			fs.mkdirSync(fixtures('.bin'));
+
+			w = watch('./**/*.js', function (file) {
+				done(new Error('Watched unexpected filepath: ' + file.path));
+			}).on('ready', touch(fixtures('.bin/index'), 'fixtures bin index'));
+			setTimeout(done, 600);
+		});
+
+		it('should not report unexpected files when using relative globs #2', function (done) {
+			fs.mkdirSync(fixtures('.bin'));
+			touch(fixtures('.bin/index'), 'fixtures bin index')();
+
+			w = watch('./**/*.js', function (file) {
+				done(new Error('Watched unexpected filepath: ' + file.path));
+			});
+			setTimeout(done, 600);
+		});
+
 		it('should normalize reported paths for modified files with non-normalized absolute glob', function (done) {
 			w = watch(fixtures('../fixtures/*.js'), function (file) {
 				file.path.should.eql(fixtures('index.js'));
