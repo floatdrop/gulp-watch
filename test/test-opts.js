@@ -1,17 +1,16 @@
 /* global describe, it */
-
 var watch = require('..');
-var join = require('path').join;
-require('should');
+var {join} = require('path');
+var should = require('should');
 
 function fixtures(glob) {
 	return join(__dirname, 'fixtures', glob);
 }
 
-describe('opts', function () {
-	it('should not mutate the options object', function () {
+describe('opts', () => {
+	it('should not mutate the options object', () => {
 		var opts = {};
 		watch(fixtures('index.js'), opts).close();
-		opts.should.have.keys([]);
+		should(opts).have.keys([]);
 	});
 });

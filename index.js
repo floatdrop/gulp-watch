@@ -1,11 +1,11 @@
 'use strict';
-var assign = require('object-assign');
 var path = require('path');
+var assign = require('object-assign');
 var PluginError = require('plugin-error');
 var fancyLog = require('fancy-log');
 var colors = require('ansi-colors');
 var chokidar = require('chokidar');
-var Duplex = require('readable-stream').Duplex;
+var {Duplex} = require('readable-stream');
 var vinyl = require('vinyl-file');
 var File = require('vinyl');
 var anymatch = require('anymatch');
@@ -45,11 +45,12 @@ function watch(globs, opts, cb) {
 		if (pathIsAbsolute(filepath)) {
 			return path.normalize(filepath);
 		}
+
 		return path.resolve(opts.cwd || process.cwd(), filepath);
 	}
 
 	function resolveGlob(glob) {
-		var mod = '';
+		let mod = '';
 
 		if (glob[0] === '!') {
 			mod = glob[0];
@@ -58,49 +59,51 @@ function watch(globs, opts, cb) {
 
 		return mod + normalize(resolveFilepath(glob));
 	}
+
 	globs = globs.map(resolveGlob);
 
 	var baseForced = Boolean(opts.base);
 	var outputStream = new Duplex({objectMode: true, allowHalfOpen: true});
 
-	outputStream._write = function _write(file, enc, done) {
+	outputStream._write = (file, enc, done) => {
 		cb(file);
-		this.push(file);
+		outputStream.push(file);
 		done();
 	};
 
-	outputStream._read = function _read() { };
+	outputStream._read = () => { };
 
 	var watcher = chokidar.watch(globs, opts);
 
-	opts.events.forEach(function (ev) {
+	opts.events.forEach(ev => {
 		watcher.on(ev, processEvent.bind(undefined, ev));
 	});
 
 	['add', 'change', 'unlink', 'addDir', 'unlinkDir', 'error', 'ready', 'raw']
-		.forEach(function (ev) {
+		.forEach(ev => {
 			watcher.on(ev, outputStream.emit.bind(outputStream, ev));
 		});
 
-	outputStream.add = function add(newGlobs) {
+	outputStream.add = newGlobs => {
 		newGlobs = normalizeGlobs(newGlobs)
 			.map(resolveGlob);
 		watcher.add(newGlobs);
-		globs.push.apply(globs, newGlobs);
+		globs.push(...newGlobs);
 	};
+
 	outputStream.unwatch = watcher.unwatch.bind(watcher);
-	outputStream.close = function () {
+	outputStream.close = () => {
 		watcher.close();
-		this.emit('end');
+		outputStream.emit('end');
 	};
 
 	function processEvent(event, filepath) {
 		filepath = resolveFilepath(filepath);
 		var fileOpts = assign({}, opts);
 
-		var glob;
-		var currentFilepath = filepath;
-		while (!(glob = globs[anymatch(globs, currentFilepath, true)]) && currentFilepath !== (currentFilepath = path.dirname(currentFilepath))) {} // eslint-disable-line no-empty-blocks/no-empty-blocks
+		let glob;
+		let currentFilepath = filepath;
+		while (!(glob = globs[anymatch(globs, currentFilepath, true)]) && currentFilepath !== (currentFilepath = path.dirname(currentFilepath))) { } // eslint-disable-line no-empty
 
 		if (!glob) {
 			fancyLog.info(
@@ -126,8 +129,8 @@ function watch(globs, opts, cb) {
 		}
 
 		// Workaround for early read
-		setTimeout(function () {
-			vinyl.read(filepath, fileOpts).then(function (file) {
+		setTimeout(() => {
+			vinyl.read(filepath, fileOpts).then(file => {
 				write(event, null, file);
 			});
 		}, opts.readDelay);

@@ -1,31 +1,25 @@
 /* global describe, it */
 
 var watch = require('..');
-var join = require('path').join;
-require('should');
+var {join} = require('path');
+var should = require('should');
 
 function fixtures(glob) {
 	return join(__dirname, 'fixtures', glob);
 }
 
-describe('watch', function () {
-	it('should throw on invalid glob argument', function () {
-		(function () {
-			watch();
-		}).should.throw();
+describe('watch', () => {
+	it('should throw on invalid glob argument', () => {
+		should(() => watch()).throw();
 
-		(function () {
-			watch(1);
-		}).should.throw();
+		should(() => watch(1)).throw();
 
-		(function () {
-			watch({});
-		}).should.throw();
+		should(() => watch({})).throw();
 	});
 
-	it('should return passThrough stream', function (done) {
+	it('should return passThrough stream', done => {
 		var stream = watch(fixtures('*.js'));
-		stream.on('data', function (obj) {
+		stream.on('data', obj => {
 			obj.should.be.eql(1);
 			stream.on('end', done);
 			stream.close();

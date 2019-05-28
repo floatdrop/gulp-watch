@@ -25,6 +25,10 @@
   "bugs": {
     "url": "https://github.com/floatdrop/gulp-watch/issues"
   },
+  "xo": {
+    "ignores": "test/fixtures/**/*.js",
+    "esnext": false
+  },
   "devDependencies": {
     "coveralls": "^2.7.0",
     "istanbul": "^0.3.0",
@@ -36,7 +40,7 @@
     "sinon": "^1.9.1",
     "stream-assert": "^2.0.1",
     "strip-ansi": "^3.0.0",
-    "xo": "^0.10.1"
+    "xo": "^0.24.0"
   },
   "dependencies": {
     "ansi-colors": "1.1.0",
