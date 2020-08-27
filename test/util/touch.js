@@ -1,6 +1,6 @@
-var fs = require('fs');
+const fs = require('fs');
 
-module.exports = function touch(path, content, cb) {
+module.exports = function (path, content, cb) {
 	if (typeof content === 'function') {
 		cb = content;
 		content = undefined;
