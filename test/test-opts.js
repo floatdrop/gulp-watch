@@ -1,17 +1,18 @@
 /* global describe, it */
 
-var watch = require('..');
-var join = require('path').join;
+const watch = require('..');
+const join = require('path').join;
+// eslint-disable-next-line import/no-unassigned-import
 require('should');
 
 function fixtures(glob) {
 	return join(__dirname, 'fixtures', glob);
 }
 
-describe('opts', function () {
-	it('should not mutate the options object', function () {
-		var opts = {};
-		watch(fixtures('index.js'), opts).close();
-		opts.should.have.keys([]);
+describe('opts', () => {
+	it('should not mutate the options object', () => {
+		const options = {};
+		watch(fixtures('index.js'), options).close();
+		options.should.have.keys(...[]);
 	});
 });
