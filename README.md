@@ -70,7 +70,7 @@ Default: `true`
 Type: `Array`  
 Default: `['add', 'change', 'unlink']`
 
-List of events, that should be watched by gulp-watch. Contains [event names from chokidar](https://github.com/paulmillr/chokidar#events).
+List of events, that should be watched by gulp-watch. Contains [event names from chokidar](https://github.com/paulmillr/chokidar#methods--events).
 
 #### options.base
 Type: `String`  
